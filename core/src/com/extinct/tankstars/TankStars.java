@@ -5,6 +5,7 @@ import Screens.PauseScreen;
 import Screens.TitleScreen;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -44,6 +45,7 @@ public class TankStars extends Game implements ApplicationListener {
 
 	@Override
 	public void render () {
+		batch = new SpriteBatch();
 		super.render();
 
 

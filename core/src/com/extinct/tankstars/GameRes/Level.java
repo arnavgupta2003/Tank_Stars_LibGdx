@@ -3,27 +3,37 @@ package com.extinct.tankstars.GameRes;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
-public class Level {
-    Texture levelStage;
-    Texture levelBackground;
+import java.io.Serializable;
+import java.util.ArrayList;
+
+public class Level implements Serializable {
+    public static int levelNumber=1;
+    public static ArrayList<Level> gameLevels = new ArrayList<>();
+    String levelStagePath;
+    String levelBackgroundPath;
+    int levelCnt ;
     public Level(){
-        this.levelStage = new Texture(Gdx.files.internal("levelStageRes/Terrain.png"));
-        this.levelBackground = new Texture(Gdx.files.internal("levelBKGRes/Broken_Buildings.png"));
+        this.levelStagePath = ("levelStageRes/Terrain.png");
+        this.levelBackgroundPath = ("levelBKGRes/Broken_Buildings.png");
+        this.levelCnt=levelNumber;
+        levelNumber++;
     }
-
+    public static void addInitLevel(){
+        Level.gameLevels.add(new Level());
+    }
     public Texture getLevelStage() {
-        return levelStage;
+        return new Texture(Gdx.files.internal(this.levelStagePath));
     }
 
-    public void setLevelStage(Texture levelStage) {
-        this.levelStage = levelStage;
+    public void setLevelStage(String levelStagePath) {
+        this.levelStagePath = levelStagePath;
     }
 
     public Texture getLevelBackground() {
-        return levelBackground;
+        return new Texture(Gdx.files.internal(this.levelBackgroundPath));
     }
 
-    public void setLevelBackground(Texture levelBackground) {
-        this.levelBackground = levelBackground;
+    public void setLevelBackground(String levelBackgroundPath) {
+        this.levelBackgroundPath = levelBackgroundPath;
     }
 }

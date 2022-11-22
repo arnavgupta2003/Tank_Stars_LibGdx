@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.extinct.tankstars.GameRes.Tank;
 import com.extinct.tankstars.TankStars;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -150,7 +151,12 @@ public class TitleScreen implements Screen {
         play.addListener(new ClickListener(){
            @Override
            public void clicked(InputEvent event,float x,float y){
-               game.setScreen(new GameScreen(game));
+               try {
+                   game.setScreen(new GameScreen(game));
+               } catch (IOException e) {
+                   System.out.println("Game save Error");
+                   e.printStackTrace();
+               }
            }
         });
 

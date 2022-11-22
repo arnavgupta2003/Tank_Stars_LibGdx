@@ -6,9 +6,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import org.w3c.dom.Text;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Tank {
+public class Tank implements Serializable {
     public static int currentTank = 0;
     public static ArrayList<Tank> tankList = new ArrayList<>();
     public static int tankID=1;
@@ -19,17 +20,17 @@ public class Tank {
     float gameHeight;
     float normalWidth;
     float normalHeight;
-    Texture TankTexture;
-    TextureRegion TankTextureRegion;
+    String TankTexturePath;
+    String TankTextureRegionPath;
     Tank(){
         tankID++;
 
     }
     void setTankTexture(String filepath){
-        this.TankTexture = new Texture(Gdx.files.internal(filepath));
+        this.TankTexturePath = (filepath);
     }
     public Texture getTankTexture(int idx){
-        return tankList.get(idx).TankTexture;
+        return new Texture(Gdx.files.internal(tankList.get(idx).TankTexturePath));
     }
     public static void addTanks(){
         Tank temp = new Tank();

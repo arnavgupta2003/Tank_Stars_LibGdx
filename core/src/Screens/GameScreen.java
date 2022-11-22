@@ -18,11 +18,13 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.extinct.tankstars.GameRes.Level;
+import com.extinct.tankstars.GameRes.Progress;
 import com.extinct.tankstars.GameRes.Tank;
 import com.extinct.tankstars.TankStars;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import Scenes.Hud;
@@ -43,12 +45,15 @@ public class GameScreen implements Screen {
     World world;
     Level currentLevel;
 
-    public GameScreen(TankStars game){
+    public GameScreen(TankStars game) throws IOException {
         this.game = game;
         gamecam = new OrthographicCamera();
         gamePort =  new FitViewport(game.V_WIDTH,game.V_HEIGHT,gamecam);
         hud = new Hud(game.batch);
-        currentLevel = new Level();
+        Level.addInitLevel();
+        Progress p1 = new Progress();
+        p1.Serialize();
+        currentLevel = Level.gameLevels.get(0);
 
         //Imple Tank using phy
         this.world = new World(new Vector2(0,-10),true);

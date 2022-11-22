@@ -38,7 +38,7 @@ public class TankStars extends Game implements ApplicationListener {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		setScreen(new GameScreen(this));
+		setScreen(new TitleScreen(this));
 	}
 
 

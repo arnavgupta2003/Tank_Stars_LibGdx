@@ -16,7 +16,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.extinct.tankstars.GameRes.Tank;
 import com.extinct.tankstars.TankStars;
+
+import java.util.ArrayList;
 
 
 public class TitleScreen implements Screen {
@@ -35,12 +38,13 @@ public class TitleScreen implements Screen {
     Texture title;
     Texture section;
     Texture buttonMenu;
-    Texture anim;
-    TextureRegion[] anime;
-    Animation tanks;
+//    Texture anim;
+//    TextureRegion[] anime;
+//    Animation tanks;
     float time;
-    Texture tryi;
 
+    ArrayList<Tank> tankList = Tank.tankList;
+    Texture TankPlaceholder;
     private  TextButton play,exit,load,chage;
     public TitleScreen(TankStars game) {
         stage = new Stage(new ScreenViewport());
@@ -52,18 +56,20 @@ public class TitleScreen implements Screen {
         title = new Texture("tile000.png");
         section = new Texture("tile002.png");
         buttonMenu =  new Texture("tile001.png");
-        anim = new Texture("output-onlinegiftools.png");
-        tryi  =  new Texture("b2886663613143.5ab66519f3003.gif");
-        anime = new TextureRegion[34];
-        int index = 0;
-        TextureRegion[][] frams = TextureRegion.split(anim,10,1);
-        for (int i = 0; i <34 ; i++) {
-
-                anime[index++] = frams[0][i];
-                
-
-        }
-        tanks =  new Animation<>(1f/30f);
+        Tank.addTanks();
+        TankPlaceholder = Tank.tankList.get(Tank.currentTank).getTankTexture(Tank.currentTank);
+//        anim = new Texture("output-onlinegiftools.png");
+//        tryi  =  new Texture("b2886663613143.5ab66519f3003.gif");
+//        anime = new TextureRegion[34];
+//        int index = 0;
+//        TextureRegion[][] frams = TextureRegion.split(anim,10,1);
+//        for (int i = 0; i <34 ; i++) {
+//
+//                anime[index++] = frams[0][i];
+//
+//
+//        }
+//        tanks =  new Animation<>(1f/30f);
 
         this.buttonInitializer();
 
@@ -96,7 +102,7 @@ public class TitleScreen implements Screen {
         //game.batch.draw(section,700,0);
         stage.draw();
         stage.act();
-        game.batch.draw(tryi,720,320,557,400);
+        game.batch.draw(TankPlaceholder,720,320,557,400);
         /*
         game.batch.draw(buttonMenu,200,400);
         game.batch.draw(buttonMenu,200,300);
@@ -146,15 +152,25 @@ public class TitleScreen implements Screen {
         });
 
         exit  = new TextButton("Exit",mySkin,"default");
+        
         exit.setPosition(200,250);
         exit.setSize(300,100);
 
         load =  new TextButton("Load",mySkin,"default");
         load.setPosition(200,100);
         load.setSize(300,100);
-        chage = new TextButton("Tank",mySkin,"default");
+        chage = new TextButton("Change Tank",mySkin,"default");
         chage.setPosition(825,200);
         chage.setSize(300,100);
+        chage.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event,float x, float y){
+                Tank.currentTank++;
+                Tank.currentTank=Tank.currentTank%3;
+                TankPlaceholder = Tank.tankList.get(Tank.currentTank).getTankTexture(Tank.currentTank);
+            }
+        });
+
         stage.addActor(play);
         stage.addActor(load);
         stage.addActor(exit);

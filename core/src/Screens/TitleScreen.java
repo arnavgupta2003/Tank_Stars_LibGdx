@@ -157,6 +157,13 @@ public class TitleScreen implements Screen {
         exit  = new TextButton("Exit",mySkin,"default");
         exit.setPosition(200,250);
         exit.setSize(300,100);
+        exit.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event,float x,float y){
+                //Set to exit screen
+                System.exit(0);
+            }
+        });
 
         load =  new TextButton("Load",mySkin,"default");
         load.setPosition(200,100);

@@ -17,6 +17,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.extinct.tankstars.GameRes.Level;
 import com.extinct.tankstars.GameRes.Tank;
 import com.extinct.tankstars.TankStars;
 
@@ -40,12 +41,15 @@ public class GameScreen implements Screen {
     TextureRegion bkgTe;
     BodyDef tankPhy;
     World world;
+    Level currentLevel;
 
     public GameScreen(TankStars game){
         this.game = game;
         gamecam = new OrthographicCamera();
         gamePort =  new FitViewport(game.V_WIDTH,game.V_HEIGHT,gamecam);
         hud = new Hud(game.batch);
+        currentLevel = new Level();
+
         //Imple Tank using phy
         this.world = new World(new Vector2(0,-10),true);
         tankPhy = new BodyDef();
@@ -64,8 +68,8 @@ public class GameScreen implements Screen {
 
         Fixture fixture = body.createFixture(fixtureDef);
 
-        baseTexture = new Texture(Gdx.files.internal("Terrain.png"));
-        bkgIMG = new Texture(Gdx.files.internal("Broken_Buildings.png"));
+        baseTexture = currentLevel.getLevelStage();
+        bkgIMG = currentLevel.getLevelBackground();
         bkgTe = new TextureRegion(bkgIMG,0,0,1920,1080);
         terrTe = new TextureRegion(baseTexture,0,0,1920,1080);
 

@@ -12,6 +12,7 @@ public class Tank {
     public static int currentTank = 0;
     public static ArrayList<Tank> tankList = new ArrayList<>();
     public static int tankID=1;
+    public float tankHealth;
     int currentTankID = tankID;
     String TankName;
     float gameWidth;

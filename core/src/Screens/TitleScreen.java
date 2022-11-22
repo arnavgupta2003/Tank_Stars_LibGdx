@@ -24,19 +24,21 @@ import java.util.ArrayList;
 
 public class TitleScreen implements Screen {
     TankStars game;
-    Texture settingsButton;private Stage stage;
-
+    Texture settingsButton;
+    private Stage stage;
 
     Skin mySkin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
     Texture img;
-    Texture newGameButton;
-    Texture resumeGameButton;
-    ImageButton button3 = new ImageButton(mySkin);
+    Texture playBtn;
+    Texture resumeBtn;
 
     Texture rewardsButton;
     TextureAtlas textureAtlas;
-    Texture title;
     Texture section;
+    Texture titleRes1;
+    Texture titleRes2;
+    Texture titleRes3;
+
     Texture buttonMenu;
 //    Texture anim;
 //    TextureRegion[] anime;
@@ -47,15 +49,16 @@ public class TitleScreen implements Screen {
     Texture TankPlaceholder;
     private  TextButton play,exit,load,chage;
     public TitleScreen(TankStars game) {
-        stage = new Stage(new ScreenViewport());
-
+        this.stage = new Stage(new ScreenViewport());
         this.game = game;
-        rewardsButton = new Texture("coin_stroke.png");
-        img = new Texture("loader_2688x1242.png");
-        newGameButton =  new Texture("Play-button-icon-in-yellow-color-on-transparent-background-PNG.png");
-        title = new Texture("tile000.png");
+
+        //rewardsButton = new Texture("coin_stroke.png");
+        //img = new Texture("loader_2688x1242.png");//Start Screen IMG
+        playBtn =  new Texture("Play-button-icon-in-yellow-color-on-transparent-background-PNG.png");
+        titleRes1 = new Texture("tile000.png");
         section = new Texture("tile002.png");
-        buttonMenu =  new Texture("tile001.png");
+
+        //buttonMenu =  new Texture("tile001.png");
         Tank.addTanks();
         TankPlaceholder = Tank.tankList.get(Tank.currentTank).getTankTexture(Tank.currentTank);
 //        anim = new Texture("output-onlinegiftools.png");
@@ -98,7 +101,7 @@ public class TitleScreen implements Screen {
         update(delta);
         game.batch.draw(new Texture("Canyon_terrein_tile_8.png"),0,0,1280,720);
         //game.batch.draw(img,0,0,1280,720);
-        game.batch.draw(title,200,550);
+        game.batch.draw(titleRes1,200,550);
         //game.batch.draw(section,700,0);
         stage.draw();
         stage.act();
@@ -152,14 +155,15 @@ public class TitleScreen implements Screen {
         });
 
         exit  = new TextButton("Exit",mySkin,"default");
-        
         exit.setPosition(200,250);
         exit.setSize(300,100);
 
         load =  new TextButton("Load",mySkin,"default");
         load.setPosition(200,100);
         load.setSize(300,100);
+
         chage = new TextButton("Change Tank",mySkin,"default");
+        chage.getLabel().setFontScale(0.60f);
         chage.setPosition(825,200);
         chage.setSize(300,100);
         chage.addListener(new ClickListener(){
@@ -179,6 +183,5 @@ public class TitleScreen implements Screen {
     }
     private void update(float delta){
         stage.act(delta);
-
     }
 }

@@ -15,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.extinct.tankstars.TankStars;
-import com.extinct.tankstars.TankStars;
 
 public class PauseScreen implements Screen {//Call Obj Serialize
     Stage st;
@@ -25,7 +24,7 @@ public class PauseScreen implements Screen {//Call Obj Serialize
     Table tb;
     Viewport vp;
     TextButton resume,exit,settings,save;
-    Skin mySkin= new Skin(Gdx.files.internal("skin/glassy-ui.json"));;
+    Skin mySkin= new Skin(Gdx.files.internal("quantum-horizon/skin/quantum-horizon-ui.json"));;
     public PauseScreen(TankStars game){
         this.game = game;
         img  = new Texture("tile002.png");

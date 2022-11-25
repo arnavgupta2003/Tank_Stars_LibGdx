@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -44,6 +45,11 @@ public class GameScreen implements Screen {
     BodyDef tankPhy;
     World world;
     Level currentLevel;
+    Texture tankTempTexture;
+    Texture tankTempTexture2;
+    Rectangle tankTemp;
+    Rectangle tankTemp2;
+    Sprite tank2Sprite;
 
     public GameScreen(TankStars game) throws IOException {
         this.game = game;
@@ -54,6 +60,23 @@ public class GameScreen implements Screen {
         Progress p1 = new Progress();
         p1.Serialize();
         currentLevel = Level.gameLevels.get(0);
+
+
+        tankTempTexture = Tank.tankList.get(0).getTankTexture(0);//Temp tank
+        tankTemp = new Rectangle();
+        tankTemp.x = 50; // center the tank1 horizontally
+        tankTemp.y = 0;
+        tankTemp.width = 75;
+        tankTemp.height = 50;
+
+        tankTempTexture2 = Tank.tankList.get(1).getTankTexture(1);//Temp tank 2
+        tankTemp2 = new Rectangle();
+        tankTemp2.x = 250; // center the tank2 horizontally
+        tankTemp2.y = 0;
+        tankTemp2.width = 75;
+        tankTemp2.height = 50;
+        tank2Sprite = new Sprite(tankTempTexture2);
+        tank2Sprite.flip(true,false);
 
         //Imple Tank using phy
         this.world = new World(new Vector2(0,-10),true);
@@ -90,13 +113,18 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         game.batch.setProjectionMatrix(hud.st.getCamera().combined);
-        //hud.st.draw();
+
+
         world.step(1/60f,6,2);
         ScreenUtils.clear(0, 0, 0.2f, 1);
         game.batch.begin();
+
         game.batch.draw(bkgTe, 0,0, 720, 250);
-        game.batch.draw(terrTe,0,0,1080,200);
+        game.batch.draw(terrTe,0,0,720,200);
+        game.batch.draw(tankTempTexture,tankTemp.x,tankTemp.y,tankTemp.width,tankTemp.height);
+        game.batch.draw(tank2Sprite,tankTemp2.x,tankTemp2.y,tankTemp2.width,tankTemp2.height);
         game.batch.end();
+        hud.st.draw();
 
     }
 

@@ -62,14 +62,14 @@ public class GameScreen implements Screen {
         currentLevel = Level.gameLevels.get(0);
 
 
-        tankTempTexture = Tank.tankList.get(0).getTankTexture(0);//Temp tank
+        tankTempTexture = Tank.tankList.get(0).getTankTexture();//Temp tank
         tankTemp = new Rectangle();
         tankTemp.x = 50; // center the tank1 horizontally
         tankTemp.y = 0;
         tankTemp.width = 75;
         tankTemp.height = 50;
 
-        tankTempTexture2 = Tank.tankList.get(1).getTankTexture(1);//Temp tank 2
+        tankTempTexture2 = Tank.tankList.get(1).getTankTexture();//Temp tank 2
         tankTemp2 = new Rectangle();
         tankTemp2.x = 250; // center the tank2 horizontally
         tankTemp2.y = 0;

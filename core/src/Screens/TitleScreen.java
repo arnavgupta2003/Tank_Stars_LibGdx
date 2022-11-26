@@ -61,7 +61,7 @@ public class TitleScreen implements Screen {
 
         //buttonMenu =  new Texture("tile001.png");
         Tank.addTanks();
-        TankPlaceholder = Tank.tankList.get(Tank.currentTank).getTankTexture(Tank.currentTank);
+        TankPlaceholder = Tank.tankList.get(Tank.currentTank).getTankTexture();
 //        anim = new Texture("output-onlinegiftools.png");
 //        tryi  =  new Texture("b2886663613143.5ab66519f3003.gif");
 //        anime = new TextureRegion[34];
@@ -174,6 +174,13 @@ public class TitleScreen implements Screen {
         load =  new TextButton("Load",mySkin,"default");
         load.setPosition(200,100);
         load.setSize(300,100);
+        load.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event,float x,float y){
+                //Temp
+                game.setScreen(new PauseScreen(game));
+            }
+        });
 
         chage = new TextButton("Change Tank",mySkin,"default");
         chage.getLabel().setFontScale(0.60f);
@@ -184,7 +191,7 @@ public class TitleScreen implements Screen {
             public void clicked(InputEvent event,float x, float y){
                 Tank.currentTank++;
                 Tank.currentTank=Tank.currentTank%3;
-                TankPlaceholder = Tank.tankList.get(Tank.currentTank).getTankTexture(Tank.currentTank);
+                TankPlaceholder = Tank.tankList.get(Tank.currentTank).getTankTexture();
             }
         });
 

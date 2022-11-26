@@ -29,8 +29,8 @@ public class Tank implements Serializable {
     void setTankTexture(String filepath){
         this.TankTexturePath = (filepath);
     }
-    public Texture getTankTexture(int idx){
-        return new Texture(Gdx.files.internal(tankList.get(idx).TankTexturePath));
+    public Texture getTankTexture(){
+        return new Texture(Gdx.files.internal(this.TankTexturePath));
     }
     public static void addTanks(){
         Tank temp = new Tank();

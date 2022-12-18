@@ -118,7 +118,6 @@ public class GameScreen implements Screen {
         world.step(1/60f,6,2);
         ScreenUtils.clear(0, 0, 0.2f, 1);
         game.batch.begin();
-
         game.batch.draw(bkgTe, 0,0, 720, 250);
         game.batch.draw(terrTe,0,0,720,200);
         game.batch.draw(tankTempTexture,tankTemp.x,tankTemp.y,tankTemp.width,tankTemp.height);

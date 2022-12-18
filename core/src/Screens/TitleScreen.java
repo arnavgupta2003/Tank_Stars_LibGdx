@@ -151,7 +151,11 @@ public class TitleScreen implements Screen {
         play.addListener(new ClickListener(){
            @Override
            public void clicked(InputEvent event,float x,float y){
-               game.setScreen(new MainGamaBox(game));
+               try {
+                   game.setScreen(new GameScreen(game));
+               } catch (IOException e) {
+                   e.printStackTrace();
+               }
            }
         });
 

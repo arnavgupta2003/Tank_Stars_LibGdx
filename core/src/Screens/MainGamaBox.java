@@ -97,8 +97,7 @@ public class MainGamaBox implements Screen {
 
                 new Vector2(-4.2f,4f),
                 new Vector2(-4.0f,3.6f),
-                new Vector2(-3.7f,3.4f),
-                new Vector2(-3.4f,3.8f),
+                new Vector2(-3.6f,3.2f),
 
 
                 new Vector2(-3.7f,4f),

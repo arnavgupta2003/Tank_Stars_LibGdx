@@ -148,15 +148,21 @@ public class TitleScreen implements Screen {
         play = new TextButton("Play",mySkin,"default");
         play.setPosition(200,400);
         play.setSize(300,100);
+//        play.addListener(new ClickListener(){
+//           @Override
+//           public void clicked(InputEvent event,float x,float y){
+//               try {
+//                   game.setScreen(new GameScreen(game));
+//               } catch (IOException e) {
+//                   e.printStackTrace();
+//               }
+//           }
+//        });
         play.addListener(new ClickListener(){
-           @Override
-           public void clicked(InputEvent event,float x,float y){
-               try {
-                   game.setScreen(new GameScreen(game));
-               } catch (IOException e) {
-                   e.printStackTrace();
-               }
-           }
+            @Override
+            public void clicked(InputEvent event,float x,float y){
+                game.setScreen(new MainGamaBox(game));
+            }
         });
 
         exit  = new TextButton("Exit",mySkin,"default");

@@ -45,8 +45,6 @@ public class Hud {
         tb.setFillParent(true);
         p1name =  new Label(p1,new Label.LabelStyle((new BitmapFont()),Color.CYAN));
         p2name=new Label(p2,new Label.LabelStyle((new BitmapFont()),Color.MAGENTA));
-        PlayerHealthBar = new Texture(Gdx.files.internal("Capture.PNG"));
-        EnemyHealthBar = new Texture(Gdx.files.internal("Capture.PNG"));
         //timer = new Label("Time",new Label.LabelStyle(new BitmapFont(),Color.CYAN));
         //tb.add(EnemyHealthBar).ex
         PlaBar = new Image(PlayerHealthBar);

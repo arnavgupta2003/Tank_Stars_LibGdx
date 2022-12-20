@@ -1,8 +1,15 @@
 package Screens;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class InputController implements InputProcessor {
+    ScreenViewport SVP;
+    InputController(){
+        this.SVP = new ScreenViewport();
+    }
     @Override
     public boolean keyDown(int keycode) {
         return false;

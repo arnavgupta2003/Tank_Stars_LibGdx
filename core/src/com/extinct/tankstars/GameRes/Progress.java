@@ -12,14 +12,19 @@ public class Progress implements Serializable {
     Tank playerTank;
     Tank enemyTank;
     Level currentLevel;
+    String storageLocation;
     public Progress(){
         this.playerTank=new Tank();
         this.enemyTank=new Tank();
         this.currentLevel=new Level();
         playerID++;
     }
+    public String getStorageLocation(){
+        return storageLocation;
+    }
     public void Serialize() throws IOException {
-        ObjectOutputStream file = new ObjectOutputStream(new FileOutputStream(("assets/storage/"+playerID+".txt")));
+        storageLocation = "assets/storage/"+playerID+".txt";
+        ObjectOutputStream file = new ObjectOutputStream(new FileOutputStream((storageLocation)));
         file.writeObject(this);
     }
     public Progress DeSerialize() throws IOException, ClassNotFoundException {

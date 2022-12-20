@@ -6,21 +6,28 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.extinct.tankstars.GameRes.Progress;
 import com.extinct.tankstars.TankStars;
 
-public class LoadScreen implements Screen {
+import java.io.IOException;
+
+public class SaveScreen implements Screen {
     TankStars game;
     private Stage st;
+
     Skin mySkin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
-    private  TextButton pause,resume,exit,settings,save;
-    public LoadScreen(TankStars game){
+    Label saveConf = new Label("   ",mySkin);
+    private  TextButton confirm,yes,no;
+    public SaveScreen(TankStars game){
         this.st = new Stage(new ScreenViewport());
         this.game = game;
         this.buttonInitializer();
+
     }
     @Override
     public void show() {
@@ -65,51 +72,57 @@ public class LoadScreen implements Screen {
 
     }
     private void buttonInitializer(){
-        pause = new TextButton("------Pause------",mySkin,"small");
-        pause.getLabel().setFontScale(2);
-        pause.setPosition(380,610);
-        pause.setSize(500,100);
 
-        resume = new TextButton("Resume",mySkin,"default");
-        resume.setPosition(480,500);
-        resume.setSize(300,100);
-        resume.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y){
 
-            }
-        });
 
-        exit  = new TextButton("Exit",mySkin,"default");
-        exit.setPosition(480,350);
-        exit.setSize(300,100);
-        exit.addListener(new ClickListener(){
+        confirm = new TextButton("Save Game? ",mySkin,"small");
+        confirm.getLabel().setFontScale(2);
+        confirm.setPosition(480,500);
+        confirm.setSize(300,100);
+
+
+        yes  = new TextButton("YES",mySkin,"default");
+        yes.setPosition(280,350);
+        yes.setSize(300,100);
+        yes.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event,float x,float y){
-                //Set to exit screen
-                System.exit(0);
+                //SAVE
+                Progress curr = new Progress();
+                try {
+                    curr.Serialize();
+
+                    String out = "Saved Game at:"+curr.getStorageLocation();
+                    saveConf = new Label(out,mySkin);
+                    st.addActor(saveConf);
+                    st.draw();
+                    st.act();
+                    System.out.println("SAVE CONF");
+                    
+                    yes.removeListener(this);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.out.println("SErialize Error");
+                }
             }
         });
 
-        save =  new TextButton("Save",mySkin,"default");
-        save.setPosition(480,200);
-        save.setSize(300,100);
-
-        settings = new TextButton("Settings",mySkin,"default");
-        //settings.getLabel().setFontScale(0.60f);
-        settings.setPosition(480,50);
-        settings.setSize(300,100);
-        settings.addListener(new ClickListener(){
+        no =  new TextButton("NO",mySkin,"default");
+        no.setPosition(680,350);
+        no.setSize(300,100);
+        no.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event,float x, float y){
-
+                game.setScreen(new PauseScreen(game));
             }
         });
-        st.addActor(pause);
-        st.addActor(resume);
-        st.addActor(save);
-        st.addActor(exit);
-        st.addActor(settings);
+
+
+
+        st.addActor(confirm);
+        st.addActor(yes);
+        st.addActor(no);
+        st.addActor(saveConf);
 
     }
 }

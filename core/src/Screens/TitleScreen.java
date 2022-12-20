@@ -183,7 +183,7 @@ public class TitleScreen implements Screen {
             @Override
             public void clicked(InputEvent event,float x,float y){
                 //Temp
-                game.setScreen(new PauseScreen(game));
+//                game.setScreen(new PauseScreen(game));
             }
         });
 

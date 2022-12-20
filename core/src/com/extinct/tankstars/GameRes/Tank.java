@@ -2,7 +2,13 @@ package com.extinct.tankstars.GameRes;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 
 import org.w3c.dom.Text;
 
@@ -22,6 +28,13 @@ public class Tank implements Serializable {
     float normalHeight;
     String TankTexturePath;
     String TankTextureRegionPath;
+    public BodyDef tankBodyDef;
+    public PolygonShape tankShape;
+    public FixtureDef tankFixture;
+    public Body tankBody;
+    public Sprite tankSprite;
+    public SpriteBatch tankSpriteBatch;
+
     Tank(){
         tankID++;
 

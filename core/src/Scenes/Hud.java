@@ -47,11 +47,11 @@ public class Hud {
         p2name=new Label(p2,new Label.LabelStyle((new BitmapFont()),Color.MAGENTA));
         //timer = new Label("Time",new Label.LabelStyle(new BitmapFont(),Color.CYAN));
         //tb.add(EnemyHealthBar).ex
-        PlaBar = new Image(PlayerHealthBar);
+//        PlaBar = new Image(PlayerHealthBar);
 //        PlaBar.setPosition(10,5,0);
 //        PlaBar.setWidth(20);
 //        PlaBar.setHeight(10);
-        EneBar = new Image(EnemyHealthBar);
+//        EneBar = new Image(EnemyHealthBar);
 //        EneBar.setWidth(20);
 //        EneBar.setHeight(10);
 //        PlaBar.setPosition(50,5,0);

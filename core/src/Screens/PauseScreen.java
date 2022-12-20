@@ -2,6 +2,7 @@ package Screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -16,15 +17,24 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.extinct.tankstars.GameRes.Tank;
 import com.extinct.tankstars.TankStars;
 
+import java.security.Key;
+
 public class PauseScreen implements Screen {
     TankStars game;
+    Screen retScreen;
     private Stage st;
     Skin mySkin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
 
     private  TextButton pause,resume,exit,settings,save;
-    public PauseScreen(TankStars game) {
+    public PauseScreen(TankStars game){
         this.st = new Stage(new ScreenViewport());
         this.game = game;
+        this.buttonInitializer();
+    }
+    public PauseScreen(TankStars game,Screen s) {
+        this.st = new Stage(new ScreenViewport());
+        this.game = game;
+        this.retScreen=s;
         this.buttonInitializer();
     }
     @Override
@@ -84,7 +94,7 @@ public class PauseScreen implements Screen {
         resume.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-
+                game.setScreen(retScreen);
             }
         });
 
@@ -102,6 +112,12 @@ public class PauseScreen implements Screen {
         save =  new TextButton("Save",mySkin,"default");
         save.setPosition(480,200);
         save.setSize(300,100);
+        save.addListener(new ClickListener(){
+           @Override
+           public void clicked(InputEvent event,float x,float y){
+               game.setScreen(new SaveScreen(game));
+           }
+        });
 
         settings = new TextButton("Settings",mySkin,"default");
         //settings.getLabel().setFontScale(0.60f);

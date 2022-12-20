@@ -1,5 +1,6 @@
 package com.extinct.tankstars;
 
+import Screens.LoadScreen;
 import Screens.TitleScreen;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;

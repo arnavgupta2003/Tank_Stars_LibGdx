@@ -25,8 +25,11 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.extinct.tankstars.GameRes.Tank;
 import com.extinct.tankstars.TankStars;
+
+import java.awt.geom.RectangularShape;
 
 import jdk.tools.jmod.Main;
 
@@ -45,6 +48,7 @@ public class MainGamaBox implements Screen {
     CircleShape s2;
     Vector2 movement = new Vector2();
     Vector2 movement3 = new Vector2();
+//    ChainShape ground;
     ChainShape ground;
     Vector2 movement2 = new Vector2();
 //    Texture gTex =  new Texture("C:\\Users\\91987\\Desktop\\.vscode\\AP Project\\assets\\assets\\Canyon_terrein_tile_8.png");
@@ -86,14 +90,17 @@ public class MainGamaBox implements Screen {
 
     public void createGround(){
         ground  = new ChainShape();
+//        ground = new PolygonShape();
+//        ground.setAsBox(200/40,150/40);
         BodyDef ball  = new BodyDef();
-        ball.position.set(-2,5.5f); // 1 meter not pixel
+//        ball.position.set(-2,5.5f); // 1 meter not pixel
+        ball.position.set(100/40,100/40);
         FixtureDef fex = new FixtureDef();
         fex.density = 2.5f;
         fex.friction = 0.45f;
         fex.restitution = 0.22f;
         ball.type = BodyDef.BodyType.StaticBody;
-        ball.position.set(0,0);
+
         fex.friction = .5f;
         fex.restitution = 0;
         Vector2 vert  = new Vector2();
@@ -182,15 +189,34 @@ public class MainGamaBox implements Screen {
     public void tank1(){
 //        tank1  = new BodyDef();
 //        tank1.type = BodyDef.BodyType.DynamicBody;
+//        BodyDef tempTank = new BodyDef();
+//        tempTank.type = BodyDef.BodyType.StaticBody;
+//        tempTank.position.set(300/40,350/40);
+//        CircleShape tankShape = new CircleShape();
+//        FixtureDef tankFixture = new FixtureDef();
+////        tankA.tankShape.setAsBox(.5f,1);
+//        tankShape.setRadius(50/40);
+//        tankFixture.shape=tankShape;
+//
+//        Body tankBody = world.createBody(tempTank);
+//        tankBody.createFixture(tankFixture);
+//        tankA.tankSprite = new Sprite(tankA.getTankTexture());
+//
+//        tankA.tankSprite.setSize(tankA.tankBody.getPosition().x,tankA.tankBody.getPosition().y);
+//        tankA.tankBody.setUserData("TankA");
 
-        //OOPS
+
+
+
+//        //OOPS
         tankA = Tank.tankList.get(0);
         tankA.tankBodyDef = new BodyDef();
         tankA.tankBodyDef.type = BodyDef.BodyType.DynamicBody;
-        tankA.tankBodyDef.position.set(8.5f,10);
-        tankA.tankShape = new PolygonShape();
+        tankA.tankBodyDef.position.set(300/40,350/40);
+        tankA.tankShape = new CircleShape();
         tankA.tankFixture = new FixtureDef();
-        tankA.tankShape.setAsBox(.5f,1);
+//        tankA.tankShape.setAsBox(.5f,1);
+        tankA.tankShape.setRadius(50/40);
         tankA.tankFixture.shape=tankA.tankShape;
         tankA.tankFixture.friction=.75f;
         tankA.tankFixture.restitution=.1f;
@@ -198,7 +224,9 @@ public class MainGamaBox implements Screen {
         tankA.tankBody = world.createBody(tankA.tankBodyDef);
         tankA.tankBody.createFixture(tankA.tankFixture);
         tankA.tankSprite = new Sprite(tankA.getTankTexture());
+
         tankA.tankSprite.setSize(tankA.tankBody.getPosition().x,tankA.tankBody.getPosition().y);
+        tankA.tankBody.setUserData("TankA");
 
 
         //END OOPS
@@ -265,10 +293,11 @@ public class MainGamaBox implements Screen {
         tankB = Tank.tankList.get(1);
         tankB.tankBodyDef = new BodyDef();
         tankB.tankBodyDef.type = BodyDef.BodyType.DynamicBody;
-        tankB.tankBodyDef.position.set(-8.5f,10);
-        tankB.tankShape = new PolygonShape();
+        tankB.tankBodyDef.position.set(350/40,350/40);
+        tankB.tankShape = new CircleShape();
         tankB.tankFixture = new FixtureDef();
-        tankB.tankShape.setAsBox(.5f,1);
+//        tankB.tankShape.setAsBox(.5f,1);
+        tankB.tankShape.setRadius(50/40);
         tankB.tankFixture.shape=tankB.tankShape;
         tankB.tankFixture.friction=.75f;
         tankB.tankFixture.restitution=.1f;
@@ -277,15 +306,17 @@ public class MainGamaBox implements Screen {
         tankB.tankBody.createFixture(tankB.tankFixture);
         tankB.tankSprite = new Sprite(tankB.getTankTexture());
         tankB.tankSprite.setSize(tankB.tankBody.getPosition().x,tankB.tankBody.getPosition().y);
+        tankB.tankBody.setUserData("TankB");
 
     }
 
     @Override
     public void show() {
         this.world =  new World(new Vector2(0,-9.8f),true);// vector   2    is gravity vector
-        world.setContactListener(onCollisionListener);
+//        world.setContactListener(onCollisionListener);
         debug =  new Box2DDebugRenderer();
-        camera = new OrthographicCamera(Gdx.graphics.getHeight()/25,Gdx.graphics.getWidth()/25);
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false,1280,720);
         createGround();
         tank1();
         tank2();
@@ -337,6 +368,7 @@ public class MainGamaBox implements Screen {
                     b.createFixture(bullFix);
                     //b.applyForceToCenter(new Vector2(100,0),true);
                     b.setLinearVelocity(new Vector2(-20, 5));
+                    //x velocity y velocity
                     te = b;
                 }else if(keycode == Input.Keys.ESCAPE){
                     isPaused=true;
@@ -361,116 +393,118 @@ public class MainGamaBox implements Screen {
             }
 
         });
-//        final BodyDef bull =  new BodyDef();
-//        bull.type = BodyDef.BodyType.DynamicBody;
-//        s =  new CircleShape();
-//        s.setRadius(0.20f);
-//        final FixtureDef bullFix = new FixtureDef();
-//        bullFix.shape = s;
-//        bullFix.density = 0.01f;
-//
-//        bullFix.restitution = 1.0f;
-//        Gdx.input.setInputProcessor(new InputController(){
-//            @Override
-//            public boolean keyDown(int keycode){
-//                switch (keycode){
-//                    case Input.Keys.D:
-//                        movement.x = 100;
+////        final BodyDef bull =  new BodyDef();
+////        bull.type = BodyDef.BodyType.DynamicBody;
+////        s =  new CircleShape();
+////        s.setRadius(0.20f);
+////        final FixtureDef bullFix = new FixtureDef();
+////        bullFix.shape = s;
+////        bullFix.density = 0.01f;
 ////
-//                    case Input.Keys.A:
-//                        movement.x = -100;
-//
+////        bullFix.restitution = 1.0f;
+////        Gdx.input.setInputProcessor(new InputController(){
+////            @Override
+////            public boolean keyDown(int keycode){
+////                switch (keycode){
+////                    case Input.Keys.D:
+////                        movement.x = 100;
+//////
+////                    case Input.Keys.A:
+////                        movement.x = -100;
 ////
-////                    case Input.Keys.F :
+//////
+//////                    case Input.Keys.F :
+//////
+//////                            Body b = world.createBody(bull);
+//////                            b.createFixture(bullFix);
+//////                            //b.applyForceToCenter(new Vector2(100,0),true);
+//////                            b.setLinearVelocity(new Vector2(-20, 5));
+//////                            te = b;
+//////                            l += 1;
+//////
 ////
-////                            Body b = world.createBody(bull);
-////                            b.createFixture(bullFix);
-////                            //b.applyForceToCenter(new Vector2(100,0),true);
-////                            b.setLinearVelocity(new Vector2(-20, 5));
-////                            te = b;
-////                            l += 1;
+////                    case Input.Keys.S:
+////                        movement.x = 0;
+////                }
+////                return true;
+////            }
 ////
-//
-//                    case Input.Keys.S:
-//                        movement.x = 0;
-//                }
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean keyUp(int keycode) {
-//                switch(keycode){
-//                    case Input.Keys.D:
-//                        movement.x = 0;
-//                    case Input.Keys.A:
-//                        movement.x = 0;
-//                    case Input.Keys.F:
-//                        movement2.x = -10;
-//
-//
-//                }
-//                return true;
-//            }
-//        });
-//        BodyDef ball  = new BodyDef();
-//        BodyDef tank2 = new BodyDef();
-//
-//
-//        ball.type =  BodyDef.BodyType.DynamicBody;
-//        ball.position.set(-2,5.5f); // 1 meter not pixel
-//        FixtureDef fex = new FixtureDef();
-//        fex.density = 2.5f;
-//        fex.friction = 0.45f;
-//        fex.restitution = 0.22f;
-//
-//        CircleShape shape =  new CircleShape();
-//        shape.setRadius(0.25f);
-//        fex.shape =  shape;
-//
-//        shape.dispose();
-//
-//        // Ground
-//        ball.type = BodyDef.BodyType.StaticBody;
-//        ball.position.set(0,0);
-//        fex.friction = .5f;
-//        fex.restitution = 0;
-//
-//        ground =  new ChainShape();
-//
-//        ground.createChain(new Vector2[] {new Vector2(-100,2),new Vector2(4200,3)});
-//        GroundReg.setRegion(0,0,gTex.getWidth(),gTex.getHeight());
-//        //,new Vector2(3,3),new Vector2(4,4),new Vector2(5,3),new Vector2(6,3),new Vector2(8,4),new Vector2(4000f,3.5f)});
-//        fex.shape =  ground;
-//        world.createBody(ball).createFixture(fex);
-//        ground.dispose();
-//
-//        ball.type = BodyDef.BodyType.DynamicBody;
-//        ball.position.set(5.5f,10);
-//        PolygonShape tank = new PolygonShape();
-//        PolygonShape tankr = new PolygonShape();
-//        tank.setAsBox(.5f,1);
-//        tankr.setAsBox(.5f,1);
-//        fex.shape =  tank;
-//        fex.friction = .75f;
-//        fex.restitution = .1f;
-//        fex.density = 6;
-//        tankHolder =world.createBody(ball);
-//        tank2.type = BodyDef.BodyType.DynamicBody;
-//        tank2.position.set(2.5f,10);
-//        tank2Holder = world.createBody(tank2);
-//        tankHolder.createFixture(fex);
-//        tank2Holder.createFixture(fex);
-//
-//        tank.dispose();
+////            @Override
+////            public boolean keyUp(int keycode) {
+////                switch(keycode){
+////                    case Input.Keys.D:
+////                        movement.x = 0;
+////                    case Input.Keys.A:
+////                        movement.x = 0;
+////                    case Input.Keys.F:
+////                        movement2.x = -10;
+////
+////
+////                }
+////                return true;
+////            }
+////        });
+////        BodyDef ball  = new BodyDef();
+////        BodyDef tank2 = new BodyDef();
+////
+////
+////        ball.type =  BodyDef.BodyType.DynamicBody;
+////        ball.position.set(-2,5.5f); // 1 meter not pixel
+////        FixtureDef fex = new FixtureDef();
+////        fex.density = 2.5f;
+////        fex.friction = 0.45f;
+////        fex.restitution = 0.22f;
+////
+////        CircleShape shape =  new CircleShape();
+////        shape.setRadius(0.25f);
+////        fex.shape =  shape;
+////
+////        shape.dispose();
+////
+////        // Ground
+////        ball.type = BodyDef.BodyType.StaticBody;
+////        ball.position.set(0,0);
+////        fex.friction = .5f;
+////        fex.restitution = 0;
+////
+////        ground =  new ChainShape();
+////
+////        ground.createChain(new Vector2[] {new Vector2(-100,2),new Vector2(4200,3)});
+////        GroundReg.setRegion(0,0,gTex.getWidth(),gTex.getHeight());
+////        //,new Vector2(3,3),new Vector2(4,4),new Vector2(5,3),new Vector2(6,3),new Vector2(8,4),new Vector2(4000f,3.5f)});
+////        fex.shape =  ground;
+////        world.createBody(ball).createFixture(fex);
+////        ground.dispose();
+////
+////        ball.type = BodyDef.BodyType.DynamicBody;
+////        ball.position.set(5.5f,10);
+////        PolygonShape tank = new PolygonShape();
+////        PolygonShape tankr = new PolygonShape();
+////        tank.setAsBox(.5f,1);
+////        tankr.setAsBox(.5f,1);
+////        fex.shape =  tank;
+////        fex.friction = .75f;
+////        fex.restitution = .1f;
+////        fex.density = 6;
+////        tankHolder =world.createBody(ball);
+////        tank2.type = BodyDef.BodyType.DynamicBody;
+////        tank2.position.set(2.5f,10);
+////        tank2Holder = world.createBody(tank2);
+////        tankHolder.createFixture(fex);
+////        tank2Holder.createFixture(fex);
+////
+////        tank.dispose();
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0,0,0,1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+//        Gdx.gl.glClearColor(0,0,0,1);
+//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        ScreenUtils.clear(0,0,0,1);
+        camera.update();
         //Add bkg texture here
-        world.step(1/60f,8,3);
+        world.step(1/60f,6,2);
 //        tankHolder.applyForceToCenter(movement,true);
 //        tankHolder.applyLinearImpulse(movement2,new Vector2(tankHolder.getPosition().x,tankHolder.getPosition().y),true);
 
@@ -492,20 +526,22 @@ public class MainGamaBox implements Screen {
 //
 //        movement2.x = 0;
 //        camera.update();
-        Vector2 pos = tankA.tankBody.getPosition();
-        batch.begin();
 
-        batch.draw(tankA.tankSprite,pos.x+640,pos.y+180);
+
+        batch.begin();
+        tankA.tankSprite.draw(batch);
+        Vector2 pos = tankA.tankBody.getPosition();
+        tankA.tankSprite.setSize(150,100);
+        tankA.tankSprite.setPosition(pos.x*40 -20,pos.y*40 -20);
+//        System.out.println(tankA.tankBody.getPosition().x*40+ " " + tankA.tankBody.getPosition().y*40);
+//        tankA.tankSprite.setPosition(pos.x*40+620,pos.y*40+215);
+
+//        batch.draw(tankA.tankSprite,pos.x+640,pos.y+180);
 
         batch.end();
 
-        debug.render(world,camera.combined);
 
-
-
-
-
-
+        debug.render(world,camera.combined.scl(40));
 
 
     }
@@ -562,7 +598,14 @@ class ListenerClass implements ContactListener {
     public void beginContact(Contact contact) {
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
-
+        try {
+            if (fixtureA.getUserData().equals("TankA") && fixtureB.getUserData().equals("TankB") ||
+                    fixtureB.getUserData().equals("TankA") && fixtureA.getUserData().equals("TankB")) {
+                System.out.println("WORKS");
+            }
+        }catch(NullPointerException e){
+            e.printStackTrace();
+        }
         Gdx.app.log("BeginContact", "between " + fixtureA.toString() + " and " + fixtureB.toString());
 
 

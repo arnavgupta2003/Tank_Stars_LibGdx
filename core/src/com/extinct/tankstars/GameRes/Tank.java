@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 
@@ -29,7 +30,7 @@ public class Tank implements Serializable {
     String TankTexturePath;
     String TankTextureRegionPath;
     public BodyDef tankBodyDef;
-    public PolygonShape tankShape;
+    public CircleShape tankShape;
     public FixtureDef tankFixture;
     public Body tankBody;
     public Sprite tankSprite;

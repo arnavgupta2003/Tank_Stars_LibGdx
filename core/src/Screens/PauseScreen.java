@@ -105,7 +105,7 @@ public class PauseScreen implements Screen {
             @Override
             public void clicked(InputEvent event,float x,float y){
                 //Set to exit screen
-                System.exit(0);
+                game.setScreen(new ExitScreen(game));
             }
         });
 

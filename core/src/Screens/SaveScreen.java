@@ -19,10 +19,11 @@ import java.io.IOException;
 public class SaveScreen implements Screen {
     TankStars game;
     private Stage st;
+    boolean isSaved= false;
 
     Skin mySkin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
     Label saveConf = new Label("   ",mySkin);
-    private  TextButton confirm,yes,no;
+    private  TextButton confirm,yes,no,goBack;
     public SaveScreen(TankStars game){
         this.st = new Stage(new ScreenViewport());
         this.game = game;
@@ -40,11 +41,17 @@ public class SaveScreen implements Screen {
         Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        if(isSaved){
+            no.removeListener(no.getClickListener());
+            yes.removeListener(yes.getClickListener());
+        }
+
         game.batch.begin();
         game.batch.draw(new Texture("Canyon_terrein_tile_8.png"),0,0,1280,720);
         game.batch.end();
         st.draw();
         st.act();
+
     }
 
     @Override
@@ -93,6 +100,7 @@ public class SaveScreen implements Screen {
                     curr.Serialize();
 
                     String out = "Saved Game at:"+curr.getStorageLocation();
+                    isSaved=true;
                     saveConf = new Label(out,mySkin);
                     st.addActor(saveConf);
                     st.draw();
@@ -100,6 +108,7 @@ public class SaveScreen implements Screen {
                     System.out.println("SAVE CONF");
                     
                     yes.removeListener(this);
+
                 } catch (IOException e) {
                     e.printStackTrace();
                     System.out.println("SErialize Error");
@@ -117,11 +126,21 @@ public class SaveScreen implements Screen {
             }
         });
 
+        goBack =  new TextButton("Go Back",mySkin,"default");
+        goBack.setPosition(480,200);
+        goBack.setSize(300,100);
+        goBack.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event,float x, float y){
+                game.setScreen(new PauseScreen(game));
+            }
+        });
 
 
         st.addActor(confirm);
         st.addActor(yes);
         st.addActor(no);
+        st.addActor(goBack);
         st.addActor(saveConf);
 
     }

@@ -16,12 +16,12 @@ import com.extinct.tankstars.TankStars;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class LoadScreen implements Screen {
+public class ExitScreen implements Screen {
     TankStars game;
     private Stage st;
     Skin mySkin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
     private  TextButton lsg,lsg1,lsg2;
-    public LoadScreen(TankStars game){
+    public ExitScreen(TankStars game){
         this.st = new Stage(new ScreenViewport());
         this.game = game;
         this.buttonInitializer();
@@ -70,26 +70,23 @@ public class LoadScreen implements Screen {
     }
     private void buttonInitializer(){
 
-        lsg = new TextButton("--Load Save Game--",mySkin,"small");
+        lsg = new TextButton("--Exit Game--",mySkin,"small");
         lsg.getLabel().setFontScale(2);
         lsg.setPosition(380,610);
         lsg.setSize(500,100);
         st.addActor(lsg);st.draw();
         st.act();
 
-        lsg1 = new TextButton("There is no Saved Game Yet",mySkin,"small");
+        lsg1 = new TextButton("Are you Sure ?",mySkin,"small");
         lsg1.getLabel().setFontScale(2);
-        lsg1.setPosition(380,310);
+        lsg1.setPosition(380,410);
         lsg1.setSize(500,100);
+        st.addActor(lsg1);
+        st.draw();st.act();
 
-        if(Progress.playerID<=0){
-            st.addActor(lsg1);
-            st.draw();st.act();
-        }
-
-        lsg2 = new TextButton("Go Back",mySkin,"default");
-        lsg2.setPosition(380,110);
-        lsg2.setSize(500,100);
+        lsg2 = new TextButton("YES",mySkin,"default");
+        lsg2.setPosition(280,250);
+        lsg2.setSize(300,100);
         lsg2.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -99,30 +96,18 @@ public class LoadScreen implements Screen {
         st.addActor(lsg2);
         st.act();st.draw();
 
-        final ArrayList<TextButton> btnArr = new ArrayList<>();
-        for(int i=0;i< Progress.playerID;i++) {
-            TextButton btn = new TextButton(""+(i+1), mySkin, "default");
-            btn.getLabel().setFontScale(2);
-            btn.setPosition(480, 500 - (i) * 150);
-            btn.setSize(300, 100);
-            btn.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    Progress curr = new Progress();
-                    Progress.playerID--;
-                    try {
-                        curr.DeSerialize(1);//Change ot idx
-                        game.setScreen(new MainGamaBox(game));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            btnArr.add(btn);
-            st.addActor(btn);
-            st.draw();st.act();
-        }
+        lsg2 = new TextButton("No",mySkin,"default");
+        lsg2.setPosition(680,250);
+        lsg2.setSize(300,100);
+        lsg2.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new PauseScreen(game));
+                game.dispose();
+            }
+        });
+        st.addActor(lsg2);
+        st.act();st.draw();
+
     }
 }

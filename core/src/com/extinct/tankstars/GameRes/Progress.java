@@ -27,8 +27,8 @@ public class Progress implements Serializable {
         ObjectOutputStream file = new ObjectOutputStream(new FileOutputStream((storageLocation)));
         file.writeObject(this);
     }
-    public Progress DeSerialize() throws IOException, ClassNotFoundException {
-        ObjectInputStream file = new ObjectInputStream(new FileInputStream(("assets/storage/"+playerID+".txt")));
+    public Progress DeSerialize(int PlID) throws IOException, ClassNotFoundException {
+        ObjectInputStream file = new ObjectInputStream(new FileInputStream(("assets/storage/"+PlID+".txt")));
         return (Progress) file.readObject();
     }
 }

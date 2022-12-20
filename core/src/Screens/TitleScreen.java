@@ -165,7 +165,7 @@ public class TitleScreen implements Screen {
             }
         });
 
-        exit  = new TextButton("Exit",mySkin,"default");
+        exit  = new TextButton("Quit",mySkin,"default");
         exit.setPosition(200,250);
         exit.setSize(300,100);
         exit.addListener(new ClickListener(){
@@ -183,7 +183,7 @@ public class TitleScreen implements Screen {
             @Override
             public void clicked(InputEvent event,float x,float y){
                 //Temp
-//                game.setScreen(new PauseScreen(game));
+                game.setScreen(new LoadScreen(game));
             }
         });
 

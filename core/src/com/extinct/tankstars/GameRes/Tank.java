@@ -22,6 +22,7 @@ public class Tank implements Serializable {
     public static int tankID=1;
     public float tankHealth;
     int currentTankID = tankID;
+    float currentBulletDamage;
     String TankName;
     float gameWidth;
     float gameHeight;
@@ -38,8 +39,19 @@ public class Tank implements Serializable {
 
     Tank(){
         tankID++;
+        this.tankHealth=1f;
+        this.currentBulletDamage=0.2f;
 
     }
+
+    public float getCurrentBulletDamage() {
+        return currentBulletDamage;
+    }
+
+    public void setCurrentBulletDamage(float currentBulletDamage) {
+        this.currentBulletDamage = currentBulletDamage;
+    }
+
     void setTankTexture(String filepath){
         this.TankTexturePath = (filepath);
     }

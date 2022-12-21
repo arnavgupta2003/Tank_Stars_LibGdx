@@ -1,5 +1,6 @@
 package Screens;
 
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -36,8 +37,13 @@ public class MainGamaBox implements Screen {
     Screen currScreen;
     private Hud hud;
     public World world;
+    boolean isFin=false;
     public Box2DDebugRenderer debug;
     public OrthographicCamera camera;
+    public static float tankAHealth;
+    public static float tankBHealth;
+    private String vic;
+
     Body te;
     boolean isPaused;
     boolean isEnabled;
@@ -304,7 +310,7 @@ public class MainGamaBox implements Screen {
 
         tankA.tankSprite.setSize(tankA.tankBody.getPosition().x,tankA.tankBody.getPosition().y);
         tankA.tankBody.setUserData("TankA");
-
+        MainGamaBox.tankAHealth=tankA.tankHealth;
 
         //END OOPS
 
@@ -384,6 +390,7 @@ public class MainGamaBox implements Screen {
         tankB.tankSprite = new Sprite(tankB.getTankTexture());
         tankB.tankSprite.setSize(tankB.tankBody.getPosition().x,tankB.tankBody.getPosition().y);
         tankB.tankBody.setUserData("TankB");
+        MainGamaBox.tankBHealth=tankB.tankHealth;
 
     }
 
@@ -633,6 +640,7 @@ public class MainGamaBox implements Screen {
                 }
                 toForce.applyLinearImpulse(val, 0f, toForce.getPosition().x, toForce.getPosition().y, true);
                 toForce = null;
+
             }
         }
 
@@ -659,6 +667,10 @@ public class MainGamaBox implements Screen {
 //
 //        movement2.x = 0;
        //camera.update();
+        if(isFin){
+            game.setScreen(new VictoryScreen(game,vic));
+        }
+
         debug.render(world,camera.combined.scl(40));
 
         batch.begin();
@@ -763,9 +775,28 @@ public class MainGamaBox implements Screen {
                 if(BodyA.getUserData()=="bulletFromTankA"){
                     toDelete=BodyA;
                     toForce = BodyB;
+                    tankB.tankHealth-=tankA.getCurrentBulletDamage();
+                    MainGamaBox.tankBHealth=tankB.tankHealth;
+                    float w = hud.getP2HealthBar().getWidth();
+                    w-=10;
+                    if(w<=0){
+                        isFin=true;
+                        vic="Player 2";
+                    }else
+                        hud.getP2HealthBar().setWidth(w);
+
                 }else {
                     toDelete = BodyB;
                     toForce=BodyA;
+                    tankB.tankHealth-=tankA.getCurrentBulletDamage();
+                    MainGamaBox.tankBHealth=tankB.tankHealth;
+                    float w = hud.getP2HealthBar().getWidth();
+                    w-=10;
+                    if(w<=0){
+                        isFin=true;
+                        vic="Player 2";
+                    }else
+                        hud.getP2HealthBar().setWidth(w);
                 }
             }
 
@@ -774,9 +805,28 @@ public class MainGamaBox implements Screen {
                 if(BodyA.getUserData()=="bulletFromTankB"){
                     toDelete=BodyA;
                     toForce = BodyB;
+                    tankA.tankHealth-=tankB.getCurrentBulletDamage();
+                    MainGamaBox.tankAHealth=tankA.tankHealth;
+
+                    float w = hud.getP1HealthBar().getWidth();
+                    w-=10;
+                    if(w<=0){
+                        isFin=true;
+                        vic="Player 1";
+                    }else
+                        hud.getP1HealthBar().setWidth(w);
                 }else {
                     toDelete = BodyB;
                     toForce=BodyA;
+                    tankA.tankHealth-=tankB.getCurrentBulletDamage();
+                    MainGamaBox.tankAHealth=tankA.tankHealth;
+                    float w = hud.getP1HealthBar().getWidth();
+                    w-=10;
+                    if(w<=0){
+                        isFin=true;
+                        vic="Player 1";
+                    }else
+                        hud.getP1HealthBar().setWidth(w);
                 }
             }
         }

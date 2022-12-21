@@ -1,9 +1,12 @@
 package Screens;
 
 
+import static java.lang.Thread.sleep;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -23,6 +26,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.extinct.tankstars.GameRes.Tank;
 import com.extinct.tankstars.TankStars;
@@ -42,7 +46,10 @@ public class MainGamaBox implements Screen {
     public OrthographicCamera camera;
     public static float tankAHealth;
     public static float tankBHealth;
+    public static boolean turnA=true;
+    public static boolean turnB=false;
     private String vic;
+    private boolean displayExp=false;
 
     Body te;
     boolean isPaused;
@@ -68,6 +75,7 @@ public class MainGamaBox implements Screen {
     public Body b;
     public Body b2;
     public Body grnd;
+    private Texture exp = new Texture(Gdx.files.internal("levelStageRes/FX_explode_5.png"));
 
 //    ChainShape ground;
     ChainShape ground;
@@ -112,7 +120,7 @@ public class MainGamaBox implements Screen {
 
 
     public MainGamaBox(TankStars game){
-        hud= new Hud(game.batch,"missile1","missile1");
+        hud= new Hud(game.batch,"Normal bullets","Normal bullets");
         this.game  = game;
         batch = new SpriteBatch();
         Tank.addTanks();
@@ -431,10 +439,12 @@ public class MainGamaBox implements Screen {
             @Override
             public boolean keyDown(int keycode) {
                 if(keycode == Input.Keys.LEFT){
-                    tankB.tankBody.setLinearVelocity(-10,0);
+                    if(turnA)
+                        tankB.tankBody.setLinearVelocity(-10,0);
 
                 }else if(keycode == Input.Keys.RIGHT){
-                    tankB.tankBody.setLinearVelocity(10,0);
+                    if(turnA)
+                        tankB.tankBody.setLinearVelocity(10,0);
                 }
                 else if(keycode == Input.Keys.Y){
                     if(isEnabled) {
@@ -462,27 +472,36 @@ public class MainGamaBox implements Screen {
 
                 }
                 else if(keycode == Input.Keys.H){
-                    b2 = world.createBody(bull2);
-                    b2.createFixture(bullFix2);
-                    b2.setUserData("bulletFromTankB");
-                    //b.applyForceToCenter(new Vector2(100,0),true);
+                    if(turnB) {
+                        b2 = world.createBody(bull2);
+                        b2.createFixture(bullFix2);
+                        b2.setUserData("bulletFromTankB");
+                        //b.applyForceToCenter(new Vector2(100,0),true);
 
-                    b2.setLinearVelocity(new Vector2(velx2, vely2));
-
+                        b2.setLinearVelocity(new Vector2(velx2, vely2));
+                        turnB=false;
+                        turnA=true;
+                    }
                 }
                 else if(keycode == Input.Keys.A){
-                    tankA.tankBody.setLinearVelocity(-10,0);
+                    if(turnB)
+                        tankA.tankBody.setLinearVelocity(-10,0);
                 }else if(keycode == Input.Keys.D){
-                    tankA.tankBody.setLinearVelocity(10,0);
+                    if(turnB)
+                        tankA.tankBody.setLinearVelocity(10,0);
                 }
                 else if(keycode == Input.Keys.F){
-                    b = world.createBody(bull);
-                    b.createFixture(bullFix);
-                    b.setUserData("bulletFromTankA");
-                    //b.applyForceToCenter(new Vector2(100,0),true);
-                    b.setLinearVelocity(new Vector2(velx1, vely1));
-                    //x velocity y velocity
-                    te = b;
+                    if(turnA) {
+                        b = world.createBody(bull);
+                        b.createFixture(bullFix);
+                        b.setUserData("bulletFromTankA");
+                        //b.applyForceToCenter(new Vector2(100,0),true);
+                        b.setLinearVelocity(new Vector2(velx1, vely1));
+                        //x velocity y velocity
+                        te = b;
+                        turnA=false;
+                        turnB=true;
+                    }
                 }else if(keycode == Input.Keys.ESCAPE){
                     isPaused=true;
                     pause();
@@ -640,7 +659,6 @@ public class MainGamaBox implements Screen {
                 }
                 toForce.applyLinearImpulse(val, 0f, toForce.getPosition().x, toForce.getPosition().y, true);
                 toForce = null;
-
             }
         }
 
@@ -669,6 +687,7 @@ public class MainGamaBox implements Screen {
        //camera.update();
         if(isFin){
             game.setScreen(new VictoryScreen(game,vic));
+            game.dispose();
         }
 
         debug.render(world,camera.combined.scl(40));
@@ -676,13 +695,24 @@ public class MainGamaBox implements Screen {
         batch.begin();
 
         tankA.tankSprite.draw(batch);
-        Vector2 pos = tankA.tankBody.getPosition();
+        Vector2 posA = tankA.tankBody.getPosition();
         tankA.tankSprite.setSize(250,150);
-        tankA.tankSprite.setPosition(pos.x*40 -100,pos.y*40 -70);
+        tankA.tankSprite.setPosition(posA.x*40 -100,posA.y*40 -70);
 
         tankB.tankSprite.draw(batch);
         Vector2 posB = tankB.tankBody.getPosition();
         tankB.tankSprite.setSize(250,150);
+
+        if(displayExp){
+            Sprite s = new Sprite(exp);
+            s.setPosition(posA.x,posA.y);
+            s.draw(batch);
+            try {
+                sleep(2,20);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
         tankB.tankSprite.setPosition(posB.x*40 -150,posB.y*40 -70);
 //        System.out.println(tankA.tankBody.getPosition().x*40+ " " + tankA.tankBody.getPosition().y*40);
@@ -690,9 +720,16 @@ public class MainGamaBox implements Screen {
 
 //        batch.draw(tankA.tankSprite,pos.x+640,pos.y+180);
         batch.draw(stageTex,0,0,1280,220);
+
+//        Label turn;
+        BitmapFont font = new BitmapFont();
+        if(MainGamaBox.turnA){
+            font.draw(batch,"PLAYER 1's Turn",600,600);
+        }else{
+            font.draw(batch,"PLAYER 2's Turn",600,600);
+        }
         batch.end();
-
-
+        
     }
 
 
@@ -777,6 +814,21 @@ public class MainGamaBox implements Screen {
                     toForce = BodyB;
                     tankB.tankHealth-=tankA.getCurrentBulletDamage();
                     MainGamaBox.tankBHealth=tankB.tankHealth;
+                    displayExp=true;
+                    float w = hud.getP2HealthBar().getWidth();
+                    w-=10;
+                    if(w<=0){
+                        isFin=true;
+                        vic="Player 2";
+                    }else
+                        hud.getP2HealthBar().setWidth(w);
+                    displayExp=false;
+                }else {
+                    toDelete = BodyB;
+                    toForce=BodyA;
+                    tankB.tankHealth-=tankA.getCurrentBulletDamage();
+                    MainGamaBox.tankBHealth=tankB.tankHealth;
+                    displayExp=true;
                     float w = hud.getP2HealthBar().getWidth();
                     w-=10;
                     if(w<=0){
@@ -785,18 +837,7 @@ public class MainGamaBox implements Screen {
                     }else
                         hud.getP2HealthBar().setWidth(w);
 
-                }else {
-                    toDelete = BodyB;
-                    toForce=BodyA;
-                    tankB.tankHealth-=tankA.getCurrentBulletDamage();
-                    MainGamaBox.tankBHealth=tankB.tankHealth;
-                    float w = hud.getP2HealthBar().getWidth();
-                    w-=10;
-                    if(w<=0){
-                        isFin=true;
-                        vic="Player 2";
-                    }else
-                        hud.getP2HealthBar().setWidth(w);
+                    displayExp=false;
                 }
             }
 
@@ -807,6 +848,7 @@ public class MainGamaBox implements Screen {
                     toForce = BodyB;
                     tankA.tankHealth-=tankB.getCurrentBulletDamage();
                     MainGamaBox.tankAHealth=tankA.tankHealth;
+                    displayExp=true;
 
                     float w = hud.getP1HealthBar().getWidth();
                     w-=10;
@@ -815,11 +857,14 @@ public class MainGamaBox implements Screen {
                         vic="Player 1";
                     }else
                         hud.getP1HealthBar().setWidth(w);
+
+                    displayExp=false;
                 }else {
                     toDelete = BodyB;
                     toForce=BodyA;
                     tankA.tankHealth-=tankB.getCurrentBulletDamage();
                     MainGamaBox.tankAHealth=tankA.tankHealth;
+                    displayExp=true;
                     float w = hud.getP1HealthBar().getWidth();
                     w-=10;
                     if(w<=0){
@@ -827,6 +872,8 @@ public class MainGamaBox implements Screen {
                         vic="Player 1";
                     }else
                         hud.getP1HealthBar().setWidth(w);
+
+                    displayExp=false;
                 }
             }
         }

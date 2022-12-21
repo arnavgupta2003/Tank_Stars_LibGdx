@@ -38,17 +38,29 @@ public class MainGamaBox implements Screen {
     public OrthographicCamera camera;
     Body te;
     boolean isPaused;
+    boolean isEnabled;
+    boolean isHit = false;
     int l=0;
     Body tankHolder;
     Body tank2Holder;
     CircleShape s;
     CircleShape s2;
+    BodyDef bull;
+    BodyDef bull2;
+    FixtureDef bullFix = null;
+    FixtureDef bullFix2 = null;
+    Body toDelete;
+    Body toForce;
     Vector2 movement = new Vector2();
     Vector2 movement3 = new Vector2();
-    int velx1=-20;
+    int velx1=-15;
     int vely1=5;
-    int velx2=20;
+    int velx2=15;
     int vely2=5;
+    public Body b;
+    public Body b2;
+    public Body grnd;
+
 //    ChainShape ground;
     ChainShape ground;
     Vector2 movement2 = new Vector2();
@@ -74,7 +86,7 @@ public class MainGamaBox implements Screen {
     public static Tank tankA;
     public static Tank tankB;
     ListenerClass onCollisionListener;
-
+    Texture stageTex;
     PolygonRegion polygonRegion;
 //    float[] vertices = {-4200, 2, 3, 3, 57, 42, 25, 100};
 //    short[] triangles = {0, 1, 2, 2, 3, 0};
@@ -91,12 +103,15 @@ public class MainGamaBox implements Screen {
 
 
 
+    public MainGamaBox(){
 
+    }
     public MainGamaBox(TankStars game){
         this.game  = game;
         batch = new SpriteBatch();
         Tank.addTanks();
         onCollisionListener = new ListenerClass();
+        stageTex = new Texture(Gdx.files.internal("levelStageRes/T1.png"));
 
     }
 
@@ -111,6 +126,7 @@ public class MainGamaBox implements Screen {
         fex.density = 2.5f;
         fex.friction = 0.45f;
         fex.restitution = 0.22f;
+
         ball.type = BodyDef.BodyType.StaticBody;
 
         fex.friction = .5f;
@@ -254,7 +270,9 @@ public class MainGamaBox implements Screen {
 
 
         fex.shape =  ground;
-        world.createBody(ball).createFixture(fex);
+        grnd = world.createBody(ball);
+        grnd.createFixture(fex);
+        grnd.setUserData("ground");
 
     }
 
@@ -369,7 +387,7 @@ public class MainGamaBox implements Screen {
         tankB.tankShape = new CircleShape();
         tankB.tankFixture = new FixtureDef();
 //        tankB.tankShape.setAsBox(.5f,1);
-        tankB.tankShape.setRadius(50/40);
+        tankB.tankShape.setRadius(0.6f);
         tankB.tankFixture.shape=tankB.tankShape;
         tankB.tankFixture.friction=.75f;
         tankB.tankFixture.restitution=.1f;
@@ -385,29 +403,30 @@ public class MainGamaBox implements Screen {
     @Override
     public void show() {
         this.world =  new World(new Vector2(0,-9.8f),true);// vector   2    is gravity vector
-//        world.setContactListener(onCollisionListener);
+        world.setContactListener(onCollisionListener);
         debug =  new Box2DDebugRenderer();
         camera = new OrthographicCamera();
         camera.setToOrtho(false,1340,720);
         createGround();
         tank1();
         tank2();
+        tankB.tankSprite.flip(true,false);
 
-        final BodyDef bull2 =  new BodyDef();
+        bull2 =  new BodyDef();
         bull2.type = BodyDef.BodyType.DynamicBody;
         s2 =  new CircleShape();
         s2.setRadius(0.20f);
-        final FixtureDef bullFix2 = new FixtureDef();
+        bullFix2 = new FixtureDef();
         bullFix2.shape = s2;
 
         bullFix2.density = 0.01f;
 
         bullFix2.restitution = 1.0f;
-        final BodyDef bull =  new BodyDef();
+        bull =  new BodyDef();
         bull.type = BodyDef.BodyType.DynamicBody;
         s =  new CircleShape();
         s.setRadius(0.20f);
-        final FixtureDef bullFix = new FixtureDef();
+        bullFix = new FixtureDef();
         bullFix.shape = s;
 
         bullFix.density = 0.01f;
@@ -424,33 +443,37 @@ public class MainGamaBox implements Screen {
                     tankB.tankBody.setLinearVelocity(10,0);
                 }
                 else if(keycode == Input.Keys.Y){
-                    for(int i = 0 ; i <3 ; i++) {
-                        final BodyDef aim = new BodyDef();
-                        aim.type = BodyDef.BodyType.DynamicBody;
-                        CircleShape aimer = new CircleShape();
-                        aimer.setRadius((float) (0.05 / 1000f));
-                        final FixtureDef aimFix = new FixtureDef();
-                        aimFix.shape = s2;
+                    if(isEnabled) {
+                        for (int i = 0; i < 3; i++) {
+                            final BodyDef aim = new BodyDef();
+                            aim.type = BodyDef.BodyType.DynamicBody;
+                            CircleShape aimer = new CircleShape();
+                            aimer.setRadius((float) (0.05 / 1000f));
+                            final FixtureDef aimFix = new FixtureDef();
+                            aimFix.shape = s2;
 
-                        aimFix.density = 0.01f;
+                            aimFix.density = 0.01f;
 
-                        aimFix.restitution = 1.0f;
-                        Body j = world.createBody(aim);
-                        j.createFixture(aimFix);
-                        j.setLinearVelocity(velx1, vely1);
-                        if (j.getPosition().x > tankA.tankBody.getPosition().x + 10) {
-                            world.destroyBody(j);
+                            aimFix.restitution = 1.0f;
+                            Body j = world.createBody(aim);
+                            j.setUserData("bulletFromTankB");
+                            j.createFixture(aimFix);
+                            j.setLinearVelocity(velx1, vely1);
+                            if (j.getPosition().x > tankA.tankBody.getPosition().x + 10) {
+                                world.destroyBody(j);
+                            }
                         }
+
                     }
-
-
 
                 }
                 else if(keycode == Input.Keys.H){
-                    Body b2 = world.createBody(bull2);
+                    b2 = world.createBody(bull2);
                     b2.createFixture(bullFix2);
+                    b2.setUserData("bulletFromTankB");
                     //b.applyForceToCenter(new Vector2(100,0),true);
-                    b2.setLinearVelocity(new Vector2(velx1, vely2));
+
+                    b2.setLinearVelocity(new Vector2(velx2, vely2));
 
                 }
                 else if(keycode == Input.Keys.A){
@@ -459,10 +482,11 @@ public class MainGamaBox implements Screen {
                     tankA.tankBody.setLinearVelocity(10,0);
                 }
                 else if(keycode == Input.Keys.F){
-                    Body b = world.createBody(bull);
+                    b = world.createBody(bull);
                     b.createFixture(bullFix);
+                    b.setUserData("bulletFromTankA");
                     //b.applyForceToCenter(new Vector2(100,0),true);
-                    b.setLinearVelocity(new Vector2(-20, 5));
+                    b.setLinearVelocity(new Vector2(velx1, vely1));
                     //x velocity y velocity
                     te = b;
                 }else if(keycode == Input.Keys.ESCAPE){
@@ -470,17 +494,13 @@ public class MainGamaBox implements Screen {
                     pause();
                 }
                 else if(keycode == Input.Keys.W){
-                    velx1-=2;
-                    vely1+=2;
+                    vely1+=1;
                 }else if(keycode == Input.Keys.S){
-                    velx1+=2;
-                    vely1-=2;
+                    vely1-=1;
                 }else if(keycode == Input.Keys.UP){
-                    velx2-=2;
-                    vely2+=2;
+                    vely2+=1;
                 }else if(keycode == Input.Keys.DOWN){
-                    velx2+=2;
-                    vely2-=2;
+                    vely2-=1;
                 }
 
 
@@ -615,7 +635,21 @@ public class MainGamaBox implements Screen {
         ScreenUtils.clear(0,0,0,1);
         camera.update();
         //Add bkg texture here
+
         world.step(1/60f,6,2);
+        if(toDelete!=null){
+            world.destroyBody(toDelete);
+            toDelete=null;
+            if(toForce!=null) {
+                float val = 20f;
+                if (toForce.getUserData() == "TankA") {
+                    val=-val;
+                }
+                toForce.applyLinearImpulse(val, 0f, toForce.getPosition().x, toForce.getPosition().y, true);
+                toForce = null;
+            }
+        }
+
 
 //        tankHolder.applyForceToCenter(movement,true);
 //        tankHolder.applyLinearImpulse(movement2,new Vector2(tankHolder.getPosition().x,tankHolder.getPosition().y),true);
@@ -632,32 +666,35 @@ public class MainGamaBox implements Screen {
 //
 //        }
         s.setPosition(new Vector2(tankA.tankBody.getPosition().x,tankA.tankBody.getPosition().y));
-
-        s2.setPosition(new Vector2(tankB.tankBody.getPosition().x,tankB.tankBody.getPosition().y));
+        s2.setPosition(new Vector2(tankB.tankBody.getPosition().x-50/40,tankB.tankBody.getPosition().y));
 //
 //
 //        movement2.x = 0;
        //camera.update();
-
+        debug.render(world,camera.combined.scl(40));
 
         batch.begin();
 
         tankA.tankSprite.draw(batch);
         Vector2 pos = tankA.tankBody.getPosition();
-        tankA.tankSprite.setSize(150,100);
-        tankA.tankSprite.setPosition(pos.x*40 -50,pos.y*40 -50);
+        tankA.tankSprite.setSize(250,150);
+        tankA.tankSprite.setPosition(pos.x*40 -100,pos.y*40 -70);
+
+        tankB.tankSprite.draw(batch);
+        Vector2 posB = tankB.tankBody.getPosition();
+        tankB.tankSprite.setSize(250,150);
+
+        tankB.tankSprite.setPosition(posB.x*40 -150,posB.y*40 -70);
 //        System.out.println(tankA.tankBody.getPosition().x*40+ " " + tankA.tankBody.getPosition().y*40);
 //        tankA.tankSprite.setPosition(pos.x*40+620,pos.y*40+215);
 
 //        batch.draw(tankA.tankSprite,pos.x+640,pos.y+180);
-
+        batch.draw(stageTex,0,0,1280,220);
         batch.end();
 
 
-        debug.render(world,camera.combined.scl(40));
-
-
     }
+
 
     @Override
     public void resize(int width, int height) {
@@ -686,41 +723,75 @@ public class MainGamaBox implements Screen {
             debug.dispose();
         }
     }
-}
-class ListenerClass implements ContactListener {
-    @Override
-    public void endContact(Contact contact) {
-        Fixture fixtureA = contact.getFixtureA();
-        Fixture fixtureB = contact.getFixtureB();
+    class ListenerClass implements ContactListener {
+        @Override
+        public void endContact(Contact contact) {
+            Fixture fixtureA = contact.getFixtureA();
+            Fixture fixtureB = contact.getFixtureB();
 
-        Gdx.app.log("ENDContact", "between " + fixtureA.toString() + " and " + fixtureB.toString());
+//            Gdx.app.log("ENDContact", "between " + fixtureA.toString() + " and " + fixtureB.toString());
 
-    }
-
-    @Override
-    public void preSolve(Contact contact, Manifold oldManifold) {
-
-    }
-
-    @Override
-    public void postSolve(Contact contact, ContactImpulse impulse) {
-
-    }
-
-    @Override
-    public void beginContact(Contact contact) {
-        Fixture fixtureA = contact.getFixtureA();
-        Fixture fixtureB = contact.getFixtureB();
-        try {
-            if (fixtureA.getUserData().equals("TankA") && fixtureB.getUserData().equals("TankB") ||
-                    fixtureB.getUserData().equals("TankA") && fixtureA.getUserData().equals("TankB")) {
-                System.out.println("WORKS");
-            }
-        }catch(NullPointerException e){
-            e.printStackTrace();
         }
-        Gdx.app.log("BeginContact", "between " + fixtureA.toString() + " and " + fixtureB.toString());
 
+        @Override
+        public void preSolve(Contact contact, Manifold oldManifold) {
 
-    }
-};
+        }
+
+        @Override
+        public void postSolve(Contact contact, ContactImpulse impulse) {
+
+        }
+
+        @Override
+        public void beginContact(Contact contact) {
+            Body BodyA = contact.getFixtureA().getBody();
+            Body BodyB = contact.getFixtureB().getBody();
+
+            if(BodyB.getUserData()==("TankA") && BodyA.getUserData()==("TankB") ||
+                    BodyA.getUserData()==("TankA") && BodyB.getUserData()==("TankB")){
+                System.out.println("Collide");
+            }
+            if(BodyA.getUserData()=="ground" && BodyB.getUserData()=="bulletFromTankA" ||
+                    BodyB.getUserData()=="ground" && BodyA.getUserData()=="bulletFromTankA"){
+                if(BodyA.getUserData()=="bulletFromTankA"){
+                    toDelete=BodyA;
+                }else {
+                    toDelete = BodyB;
+                }
+            }
+
+            if(BodyA.getUserData()=="ground" && BodyB.getUserData()=="bulletFromTankB" ||
+                    BodyB.getUserData()=="ground" && BodyA.getUserData()=="bulletFromTankB"){
+                if(BodyA.getUserData()=="bulletFromTankB"){
+                    toDelete=BodyA;
+                }else {
+                    toDelete = BodyB;
+                }
+            }
+
+            if(BodyA.getUserData()=="TankB" && BodyB.getUserData()=="bulletFromTankA" ||
+                    BodyB.getUserData()=="TankB" && BodyA.getUserData()=="bulletFromTankA"){
+                if(BodyA.getUserData()=="bulletFromTankA"){
+                    toDelete=BodyA;
+                    toForce = BodyB;
+                }else {
+                    toDelete = BodyB;
+                    toForce=BodyA;
+                }
+            }
+
+            if(BodyA.getUserData()=="TankA" && BodyB.getUserData()=="bulletFromTankB" ||
+                    BodyB.getUserData()=="TankA" && BodyA.getUserData()=="bulletFromTankB"){
+                if(BodyA.getUserData()=="bulletFromTankB"){
+                    toDelete=BodyA;
+                    toForce = BodyB;
+                }else {
+                    toDelete = BodyB;
+                    toForce=BodyA;
+                }
+            }
+        }
+    };
+}
+

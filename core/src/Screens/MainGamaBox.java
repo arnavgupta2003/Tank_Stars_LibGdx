@@ -28,11 +28,13 @@ import com.extinct.tankstars.TankStars;
 
 import java.awt.geom.RectangularShape;
 
+import Scenes.Hud;
 import jdk.tools.jmod.Main;
 
 public class MainGamaBox implements Screen {
     TankStars game;
     Screen currScreen;
+    private Hud hud;
     public World world;
     public Box2DDebugRenderer debug;
     public OrthographicCamera camera;
@@ -103,10 +105,8 @@ public class MainGamaBox implements Screen {
 
 
 
-    public MainGamaBox(){
-
-    }
     public MainGamaBox(TankStars game){
+        hud= new Hud(game.batch,"missile1","missile1");
         this.game  = game;
         batch = new SpriteBatch();
         Tank.addTanks();
@@ -176,77 +176,64 @@ public class MainGamaBox implements Screen {
 //                new Vector2(0.6f,3.8f),
 //                new Vector2(0.9f,3.5f),
 
-                new Vector2(1f,3.6f),
-                new Vector2(1.2f,3.4f),
-                new Vector2(1.9f,3.8f),
-                new Vector2(2.5f,3.5f),
+                new Vector2(-1.8f,0.6f),
+                new Vector2(-1.4f,0.8f),
+                new Vector2(-1.2f,0.85f),
+                new Vector2(-0.9f,0.9f),
+
+                new Vector2(2.3f,1.0f),
 
 
-                new Vector2(2.8f,3.6f),
-                new Vector2(3.2f,3.4f),
-                new Vector2(3.8f,3.8f),
-                new Vector2(4.2f,3.5f),
+                new Vector2(2.8f,1.7f),
+                new Vector2(3.0f,2.1f),
+                new Vector2(3.8f,2.45f),
+                new Vector2(4.2f,2.49f),
 
 
-                new Vector2(4.8f,3.6f),
-                new Vector2(5.3f,3.4f),
-                new Vector2(5.6f,3.8f),
-                new Vector2(6.2f,3.5f),
+                new Vector2(4.8f,3.1f),
+                new Vector2(5.3f,3.2f),
+                new Vector2(5.6f,3.4f),
+                new Vector2(6.2f,3.37f),
 
 
-                new Vector2(6.8f,3.6f),
-                new Vector2(7.5f,3.4f),
-                new Vector2(7.9f,3.8f),
-                new Vector2(8.9f,3.5f),
+                new Vector2(6.8f,3.39f),
+                new Vector2(14.9f,3.4f),
 
+                new Vector2(15.2f,3.38f),
+                new Vector2(15.8f,3.25f),
+                new Vector2(16.3f,2.9f),
+                new Vector2(16.8f,2.8f),
 
-                new Vector2(9.3f,3.6f),
-                new Vector2(9.6f,3.4f),
-                new Vector2(9.8f,3.8f),
-                new Vector2(10.6f,3.5f),
+                new Vector2(17.2f,2.7f),
+                new Vector2(17.4f,2.6f),
+                new Vector2(17.9f,2.4f),
+                new Vector2(18.9f,2.1f),
 
-                new Vector2(11.2f,4f),
-                new Vector2(11.4f,3.6f),
-                new Vector2(11.9f,3.4f),
-                new Vector2(12.8f,3.8f),
+                new Vector2(19.2f,1.9f),
+                new Vector2(19.8f,1.9f),
+                new Vector2(20.2f,1.95f),
+                new Vector2(20.5f,1.98f),
 
-                new Vector2(13.4f,4f),
-                new Vector2(13.9f,3.6f),
-                new Vector2(14.5f,3.4f),
-                new Vector2(14.9f,3.8f),
+                new Vector2(21.6f,2.1f),
+                new Vector2(22.1f,2.15f),
+                new Vector2(22.5f,2.5f),
+                new Vector2(23.6f,2.8f),
 
-                new Vector2(15.2f,4f),
-                new Vector2(15.8f,3.6f),
-                new Vector2(16.3f,3.4f),
-                new Vector2(16.8f,3.8f),
+                new Vector2(24.0f,2.85f),
+                new Vector2(24.3f,2.8f),
+                new Vector2(24.5f,2.6f),
+                new Vector2(24.8f,2.6f),
 
-                new Vector2(17.2f,4f),
-                new Vector2(17.4f,3.6f),
-                new Vector2(17.9f,3.4f),
-                new Vector2(18.9f,3.8f),
+                new Vector2(25.2f,2.4f),
+                new Vector2(25.8f,2.6f),
+                new Vector2(26.3f,2.4f),
+                new Vector2(26.8f,2.4f),
+                new Vector2(28.1f,1.9f),
+                new Vector2(30.1f,1.8f),
+                new Vector2(30.5f,1.79f),
 
-                new Vector2(19.2f,4f),
-                new Vector2(19.8f,3.6f),
-                new Vector2(20.2f,3.4f),
-                new Vector2(20.5f,3.8f),
-
-                new Vector2(21.6f,4f),
-                new Vector2(22.1f,3.6f),
-                new Vector2(22.5f,3.4f),
-                new Vector2(23.6f,3.8f),
-
-                new Vector2(24.0f,4f),
-                new Vector2(24.3f,3.6f),
-                new Vector2(24.5f,3.4f),
-                new Vector2(24.8f,3.8f),
-
-                new Vector2(25.2f,4f),
-                new Vector2(25.8f,3.6f),
-                new Vector2(30.1f,3.4f),
-                new Vector2(30.5f,3.8f),
-
-                new Vector2(30.9f,4f),
-                new Vector2(42.3f,3.6f),
+                new Vector2(30.9f,1.9f),
+                new Vector2(42.3f,1.9f),
                 new Vector2(42.8f,3.4f),
                 new Vector2(44.1f,3.8f),
                 new Vector2(44.6f,4f),
@@ -511,16 +498,15 @@ public class MainGamaBox implements Screen {
             public boolean keyUp(int keycode){
                 if(keycode == Input.Keys.LEFT){
                     tankB.tankBody.setLinearVelocity(0,0);
-
-//                    sp.setPosition(tank2Holder.getPosition().x,tank2Holder.getPosition().y);
                 }else if(keycode == Input.Keys.RIGHT){
                     tankB.tankBody.setLinearVelocity(0,0);
+                }else if(keycode == Input.Keys.A){
+                    tankA.tankBody.setLinearVelocity(0,0);
+                }else if(keycode == Input.Keys.D){
+                    tankA.tankBody.setLinearVelocity(0,0);
                 }
-
                 return true;
-
             }
-
         });
 ////        final BodyDef bull =  new BodyDef();
 ////        bull.type = BodyDef.BodyType.DynamicBody;
@@ -667,6 +653,8 @@ public class MainGamaBox implements Screen {
 //        }
         s.setPosition(new Vector2(tankA.tankBody.getPosition().x,tankA.tankBody.getPosition().y));
         s2.setPosition(new Vector2(tankB.tankBody.getPosition().x-50/40,tankB.tankBody.getPosition().y));
+        game.batch.setProjectionMatrix(hud.st.getCamera().combined);
+        hud.st.draw();
 //
 //
 //        movement2.x = 0;

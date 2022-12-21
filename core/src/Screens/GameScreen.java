@@ -58,7 +58,7 @@ public class GameScreen implements Screen {
         this.game = game;
         gamecam = new OrthographicCamera();
         gamePort =  new FitViewport(game.V_WIDTH,game.V_HEIGHT,gamecam);
-        hud = new Hud(game.batch);
+        hud = new Hud(game.batch,"sd","sde");
         Level.addInitLevel();
         Progress p1 = new Progress();
         p1.Serialize();

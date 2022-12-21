@@ -66,6 +66,7 @@ public class MainGamaBox implements Screen, Serializable {
     BodyDef bull2;
     FixtureDef bullFix = null;
     FixtureDef bullFix2 = null;
+    Body drop;
     Body toDelete;
     Body toForce;
     Vector2 movement = new Vector2();
@@ -75,8 +76,10 @@ public class MainGamaBox implements Screen, Serializable {
     int velx2=15;
     int vely2=5;
     public Body b;
+    private Body splBody;
     public Body b2;
     public Body grnd;
+    private Texture splBull ;
     private Texture exp = new Texture(Gdx.files.internal("levelStageRes/FX_explode_5.png"));
 
 //    ChainShape ground;
@@ -141,6 +144,7 @@ public class MainGamaBox implements Screen, Serializable {
         this.r_t=r_t;
         this.g_t=g_t;
         this.b_t=b_t;
+        splBull = new Texture(Gdx.files.internal("levelStageRes/missile.png"));
 
         onCollisionListener = new ListenerClass();
         stageTex = new Texture(Gdx.files.internal("levelStageRes/T1.png"));
@@ -153,6 +157,7 @@ public class MainGamaBox implements Screen, Serializable {
         this.game  = game;
         batch = new SpriteBatch();
         Tank.addTanks();
+        splBull = new Texture(Gdx.files.internal("levelStageRes/missile.png"));
         onCollisionListener = new ListenerClass();
         stageTex = new Texture(Gdx.files.internal("levelStageRes/T1.png"));
         tankA = A;
@@ -447,6 +452,8 @@ public class MainGamaBox implements Screen, Serializable {
         }
         tankB.tankSprite.flip(true,false);
 
+
+
         bull2 =  new BodyDef();
         bull2.type = BodyDef.BodyType.DynamicBody;
         s2 =  new CircleShape();
@@ -468,6 +475,20 @@ public class MainGamaBox implements Screen, Serializable {
 
         bullFix.restitution = 1.0f;
 
+        final BodyDef dropbox = new BodyDef();
+        dropbox.type =BodyDef.BodyType.DynamicBody;
+        CircleShape aimer = new CircleShape();
+        aimer.setRadius((float) (50/40));
+        aimer.setPosition(new Vector2(15,100));
+        final FixtureDef aimFix = new FixtureDef();
+        aimFix.shape = aimer;
+        aimFix.density = 2f;
+        aimFix.restitution = 0f;
+        Body j = world.createBody(dropbox);
+        j.createFixture(aimFix);
+        drop = j;
+        j.setUserData("DropBox");
+
         Gdx.input.setInputProcessor(new InputController() {
             @Override
             public boolean keyDown(int keycode) {
@@ -480,6 +501,8 @@ public class MainGamaBox implements Screen, Serializable {
                         tankB.tankBody.setLinearVelocity(10,0);
                 }
                 else if(keycode == Input.Keys.Y){
+
+
                     if(isEnabled) {
                         for (int i = 0; i < 3; i++) {
                             final BodyDef aim = new BodyDef();
@@ -496,6 +519,7 @@ public class MainGamaBox implements Screen, Serializable {
                             j.setUserData("bulletFromTankB");
                             j.createFixture(aimFix);
                             j.setLinearVelocity(velx1, vely1);
+                            splBody = j;
                             if (j.getPosition().x > tankA.tankBody.getPosition().x + 10) {
                                 world.destroyBody(j);
                             }
@@ -755,6 +779,19 @@ public class MainGamaBox implements Screen, Serializable {
 
         tankB.tankSprite.setPosition(posB.x*40 -150,posB.y*40 -70);
 
+        Sprite s = new Sprite(new Texture(Gdx.files.internal("levelStageRes/dropbox.png")));
+        s.setPosition(drop.getPosition().x*40 -150,drop.getPosition().y*4-70);
+        s.setSize(100,100);
+        s.draw(batch);
+
+
+//        Sprite splsp = new Sprite(splBull);
+//        splsp.draw(batch);
+//
+//        Vector2 posBull = splBody.getPosition();
+//        splsp.setSize(250,150);
+//        splsp.setPosition(posBull.x*40 -100,posBull.y*40 -70);
+
 //        System.out.println(tankA.tankBody.getPosition().x*40+ " " + tankA.tankBody.getPosition().y*40);
 //        tankA.tankSprite.setPosition(pos.x*40+620,pos.y*40+215);
 
@@ -928,6 +965,19 @@ public class MainGamaBox implements Screen, Serializable {
                         hud.getP1HealthBar().setWidth(w);
 
                     displayExp=false;
+                }
+            }
+
+            if(BodyA.getUserData()=="TankA" && BodyB.getUserData()=="DropBox" ||
+                    BodyB.getUserData()=="TankA" && BodyA.getUserData()=="DropBox") {
+                if (BodyA.getUserData() == "TankA") {
+                    isEnabled=true;
+                }
+            }
+            if(BodyA.getUserData()=="TankB" && BodyB.getUserData()=="DropBox" ||
+                    BodyB.getUserData()=="TankB" && BodyA.getUserData()=="DropBox") {
+                if (BodyA.getUserData() == "TankB") {
+                    isEnabled=true;
                 }
             }
         }

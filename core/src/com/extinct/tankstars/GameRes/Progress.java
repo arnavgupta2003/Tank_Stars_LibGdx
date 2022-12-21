@@ -9,13 +9,13 @@ import java.io.Serializable;
 
 public class Progress implements Serializable {
     public static int playerID=0;
-    public static Tank playerTank;
-    public static Tank enemyTank;
+    Tank playerTank;
+    Tank enemyTank;
     Level currentLevel;
     String storageLocation;
-    public Progress(Tank A,Tank B){
-        this.playerTank=A;
-        this.enemyTank=B;
+    public Progress(){
+        this.playerTank=new Tank();
+        this.enemyTank=new Tank();
         this.currentLevel=new Level();
         playerID++;
     }
@@ -27,7 +27,7 @@ public class Progress implements Serializable {
         ObjectOutputStream file = new ObjectOutputStream(new FileOutputStream((storageLocation)));
         file.writeObject(this);
     }
-    public static Progress DeSerialize(int PlID) throws IOException, ClassNotFoundException {
+    public Progress DeSerialize(int PlID) throws IOException, ClassNotFoundException {
         ObjectInputStream file = new ObjectInputStream(new FileInputStream(("assets/storage/"+PlID+".txt")));
         return (Progress) file.readObject();
     }

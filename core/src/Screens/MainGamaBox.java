@@ -978,6 +978,7 @@ public class MainGamaBox implements Screen, Serializable {
                     BodyB.getUserData()=="TankB" && BodyA.getUserData()=="DropBox") {
                 if (BodyA.getUserData() == "TankB") {
                     isEnabled=true;
+                    toDelete=drop;
                 }
             }
         }

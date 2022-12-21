@@ -19,7 +19,6 @@ import java.util.ArrayList;
 public class LoadScreen implements Screen {
     TankStars game;
     private Stage st;
-    Progress curr;
     Skin mySkin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
     private  TextButton lsg,lsg1,lsg2;
     public LoadScreen(TankStars game){
@@ -102,7 +101,6 @@ public class LoadScreen implements Screen {
 
         final ArrayList<TextButton> btnArr = new ArrayList<>();
         for(int i=0;i< Progress.playerID;i++) {
-
             TextButton btn = new TextButton(""+(i+1), mySkin, "default");
             btn.getLabel().setFontScale(2);
             btn.setPosition(480, 500 - (i) * 150);
@@ -110,10 +108,11 @@ public class LoadScreen implements Screen {
             btn.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
+                    Progress curr = new Progress();
                     Progress.playerID--;
                     try {
-                        curr.DeSerialize(Integer.valueOf(1));//Change ot idx
-                        game.setScreen(new MainGamaBox(game, curr.playerTank, curr.enemyTank));
+                        curr.DeSerialize(1);//Change ot idx
+                        game.setScreen(new MainGamaBox(game));
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (ClassNotFoundException e) {

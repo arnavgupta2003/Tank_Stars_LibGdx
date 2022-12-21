@@ -126,7 +126,9 @@ public class PauseScreen implements Screen {
         settings.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event,float x, float y){
-
+                Screen sr = new SettingScreen(game);
+                game.setScreen(sr);
+                sr.dispose();
             }
         });
         st.addActor(pause);

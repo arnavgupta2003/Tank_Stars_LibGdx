@@ -28,15 +28,17 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.extinct.tankstars.GameRes.Progress;
 import com.extinct.tankstars.GameRes.Tank;
 import com.extinct.tankstars.TankStars;
 
 import java.awt.geom.RectangularShape;
+import java.io.Serializable;
 
 import Scenes.Hud;
 import jdk.tools.jmod.Main;
 
-public class MainGamaBox implements Screen {
+public class MainGamaBox implements Screen, Serializable {
     TankStars game;
     Screen currScreen;
     private Hud hud;
@@ -45,6 +47,8 @@ public class MainGamaBox implements Screen {
     public Box2DDebugRenderer debug;
     public OrthographicCamera camera;
     public static float tankAHealth;
+    private String bullet1 = "Normal Bullet";
+    private String bullet2= "Normal Bullet";
     public static float tankBHealth;
     public static boolean turnA=true;
     public static boolean turnB=false;
@@ -55,6 +59,7 @@ public class MainGamaBox implements Screen {
     boolean isPaused;
     boolean isEnabled;
     boolean isHit = false;
+    public int r_t,g_t,b_t;
     int l=0;
     Body tankHolder;
     Body tank2Holder;
@@ -104,6 +109,7 @@ public class MainGamaBox implements Screen {
     ListenerClass onCollisionListener;
     Texture stageTex;
     PolygonRegion polygonRegion;
+    boolean isLoaded;
 //    float[] vertices = {-4200, 2, 3, 3, 57, 42, 25, 100};
 //    short[] triangles = {0, 1, 2, 2, 3, 0};
 //
@@ -126,9 +132,38 @@ public class MainGamaBox implements Screen {
         Tank.addTanks();
         onCollisionListener = new ListenerClass();
         stageTex = new Texture(Gdx.files.internal("levelStageRes/T1.png"));
+        SettingScreen.bkgMusic.play();
+
+    }
+    public MainGamaBox(TankStars game,int r_t,int g_t,int b_t){
+        bullet1="Normal Bullet";
+        bullet2="Normal Bullet";
+        hud= new Hud(game.batch,"Normal bullets","Normal bullets");
+        this.game  = game;
+        batch = new SpriteBatch();
+        Tank.addTanks();
+        this.r_t=r_t;
+        this.g_t=g_t;
+        this.b_t=b_t;
+
+        onCollisionListener = new ListenerClass();
+        stageTex = new Texture(Gdx.files.internal("levelStageRes/T1.png"));
+        SettingScreen.bkgMusic.play();
 
     }
 
+    public MainGamaBox(TankStars game,Tank A,Tank B){
+        hud= new Hud(game.batch,"Normal bullets","Normal bullets");
+        this.game  = game;
+        batch = new SpriteBatch();
+        Tank.addTanks();
+        onCollisionListener = new ListenerClass();
+        stageTex = new Texture(Gdx.files.internal("levelStageRes/T1.png"));
+        tankA = A;
+        tankB = B;
+        isLoaded=true;
+
+    }
     public void createGround(){
         ground  = new ChainShape();
 //        ground = new PolygonShape();
@@ -309,7 +344,7 @@ public class MainGamaBox implements Screen {
 //        tankA.tankShape.setAsBox(.5f,1);
         tankA.tankShape.setRadius(0.6f);
         tankA.tankFixture.shape=tankA.tankShape;
-        tankA.tankFixture.friction=.75f;
+        tankA.tankFixture.friction=2f;
         tankA.tankFixture.restitution=.1f;
         tankA.tankFixture.density=6;
         tankA.tankBody = world.createBody(tankA.tankBodyDef);
@@ -390,7 +425,7 @@ public class MainGamaBox implements Screen {
 //        tankB.tankShape.setAsBox(.5f,1);
         tankB.tankShape.setRadius(0.6f);
         tankB.tankFixture.shape=tankB.tankShape;
-        tankB.tankFixture.friction=.75f;
+        tankB.tankFixture.friction=2f;
         tankB.tankFixture.restitution=.1f;
         tankB.tankFixture.density=6;
         tankB.tankBody = world.createBody(tankB.tankBodyDef);
@@ -410,8 +445,10 @@ public class MainGamaBox implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false,1340,720);
         createGround();
-        tank1();
-        tank2();
+        if(!isLoaded) {
+            tank1();
+            tank2();
+        }
         tankB.tankSprite.flip(true,false);
 
         bull2 =  new BodyDef();
@@ -483,6 +520,10 @@ public class MainGamaBox implements Screen {
                         turnA=true;
                     }
                 }
+                else if(keycode == Input.Keys.SPACE){
+                    velx1+=0.5f;
+                    velx2+=0.5f;
+                }
                 else if(keycode == Input.Keys.A){
                     if(turnB)
                         tankA.tankBody.setLinearVelocity(-10,0);
@@ -514,6 +555,9 @@ public class MainGamaBox implements Screen {
                     vely2+=1;
                 }else if(keycode == Input.Keys.DOWN){
                     vely2-=1;
+                }else if(keycode == Input.Keys.Z){
+                    isEnabled=true;
+
                 }
 
 
@@ -642,9 +686,10 @@ public class MainGamaBox implements Screen {
 
 
 
-        Gdx.gl.glClearColor(0,0,0,1);
+        Gdx.gl.glClearColor(this.r_t,this.g_t,this.b_t,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        ScreenUtils.clear(0,0,0,1);
+//        System.out.println("DEB:"+this.r_t+" "+this.g_t+" "+this.b_t);
+        ScreenUtils.clear(this.r_t,this.g_t,this.b_t,1);
         camera.update();
         //Add bkg texture here
 
@@ -661,9 +706,7 @@ public class MainGamaBox implements Screen {
                 toForce = null;
             }
         }
-
-
-//        tankHolder.applyForceToCenter(movement,true);
+        //        tankHolder.applyForceToCenter(movement,true);
 //        tankHolder.applyLinearImpulse(movement2,new Vector2(tankHolder.getPosition().x,tankHolder.getPosition().y),true);
 
 //        tank2Holder.applyForceToCenter(movement3,true);
@@ -715,6 +758,7 @@ public class MainGamaBox implements Screen {
         }
 
         tankB.tankSprite.setPosition(posB.x*40 -150,posB.y*40 -70);
+
 //        System.out.println(tankA.tankBody.getPosition().x*40+ " " + tankA.tankBody.getPosition().y*40);
 //        tankA.tankSprite.setPosition(pos.x*40+620,pos.y*40+215);
 
@@ -722,14 +766,28 @@ public class MainGamaBox implements Screen {
         batch.draw(stageTex,0,0,1280,220);
 
 //        Label turn;
+        if(isEnabled){
+            bullet2="Speacial Bomb";
+        }
         BitmapFont font = new BitmapFont();
+        font.draw(batch,bullet1,300,600,1000,12,true);
+        font.draw(batch,bullet2,900,600,1000,12,true);
+
+
         if(MainGamaBox.turnA){
             font.draw(batch,"PLAYER 1's Turn",600,600);
         }else{
             font.draw(batch,"PLAYER 2's Turn",600,600);
         }
         batch.end();
-        
+
+        //Saving
+        tankA.setCurrentX(posA.x*40 -100);
+        tankA.setCurrentY(posA.y*40 -70);
+
+        tankB.setCurrentX(posB.x*40 -150);
+        tankB.setCurrentY(posB.y*40 -70);
+
     }
 
 

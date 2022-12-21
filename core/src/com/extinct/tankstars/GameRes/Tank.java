@@ -35,6 +35,8 @@ public class Tank implements Serializable {
     public FixtureDef tankFixture;
     public Body tankBody;
     public Sprite tankSprite;
+    private float currentX;
+    private float currentY;
     public SpriteBatch tankSpriteBatch;
 
     Tank(){
@@ -46,6 +48,22 @@ public class Tank implements Serializable {
 
     public float getCurrentBulletDamage() {
         return currentBulletDamage;
+    }
+
+    public float getCurrentX() {
+        return currentX;
+    }
+
+    public void setCurrentX(float currentX) {
+        this.currentX = currentX;
+    }
+
+    public float getCurrentY() {
+        return currentY;
+    }
+
+    public void setCurrentY(float currentY) {
+        this.currentY = currentY;
     }
 
     public void setCurrentBulletDamage(float currentBulletDamage) {

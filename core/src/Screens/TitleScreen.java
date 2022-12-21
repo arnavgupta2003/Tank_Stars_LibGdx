@@ -21,6 +21,7 @@ import com.extinct.tankstars.TankStars;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Set;
 
 
 public class TitleScreen implements Screen {
@@ -52,7 +53,7 @@ public class TitleScreen implements Screen {
     public TitleScreen(TankStars game) {
         this.stage = new Stage(new ScreenViewport());
         this.game = game;
-
+        SettingScreen.bkgMusic.play();
         //rewardsButton = new Texture("coin_stroke.png");
         //img = new Texture("loader_2688x1242.png");//Start Screen IMG
         playBtn =  new Texture("Play-button-icon-in-yellow-color-on-transparent-background-PNG.png");

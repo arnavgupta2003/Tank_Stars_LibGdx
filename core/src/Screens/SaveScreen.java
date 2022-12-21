@@ -20,6 +20,7 @@ public class SaveScreen implements Screen {
     TankStars game;
     private Stage st;
     boolean isSaved= false;
+    Progress curr;
 
     Skin mySkin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
     Label saveConf = new Label("   ",mySkin);
@@ -45,7 +46,7 @@ public class SaveScreen implements Screen {
             no.removeListener(no.getClickListener());
             yes.removeListener(yes.getClickListener());
         }
-
+        this.curr = new Progress(MainGamaBox.tankA,MainGamaBox.tankB);
         game.batch.begin();
         game.batch.draw(new Texture("Canyon_terrein_tile_8.png"),0,0,1280,720);
         game.batch.end();
@@ -95,7 +96,7 @@ public class SaveScreen implements Screen {
             @Override
             public void clicked(InputEvent event,float x,float y){
                 //SAVE
-                Progress curr = new Progress();
+
                 try {
                     curr.Serialize();
 

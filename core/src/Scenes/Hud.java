@@ -51,8 +51,8 @@ public class Hud {
         Table tb = new Table();
         tb.top();
         tb.setFillParent(true);
-        p1name =  new Label(p1,new Label.LabelStyle((new BitmapFont()),Color.MAGENTA));
-        p2name=new Label(p2,new Label.LabelStyle((new BitmapFont()),Color.MAGENTA));
+//        p1name =  new Label(p1,new Label.LabelStyle((new BitmapFont()),Color.MAGENTA));
+//        p2name=new Label(p2,new Label.LabelStyle((new BitmapFont()),Color.MAGENTA));
         p3name=new Label(p3,new Label.LabelStyle((new BitmapFont()),Color.MAGENTA));
         p1HealthBar = new HealthBar(12,10, MainGamaBox.tankAHealth);
         p2HealthBar = new HealthBar(12,10,MainGamaBox.tankBHealth);

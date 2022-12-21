@@ -6,10 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.PolygonRegion;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.EarClippingTriangulator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -48,12 +45,27 @@ public class MainGamaBox implements Screen {
     CircleShape s2;
     Vector2 movement = new Vector2();
     Vector2 movement3 = new Vector2();
+    int velx1=-20;
+    int vely1=5;
+    int velx2=20;
+    int vely2=5;
 //    ChainShape ground;
     ChainShape ground;
     Vector2 movement2 = new Vector2();
 //    Texture gTex =  new Texture("C:\\Users\\91987\\Desktop\\.vscode\\AP Project\\assets\\assets\\Canyon_terrein_tile_8.png");
     Texture gTex = new Texture(Gdx.files.internal("Canyon_terrein_tile_8.png"));
+    float[] vertices = {
+            -4200, 3,
+            1000, 4.2f
+    };
+    short[] triangles;
+
+
+
+
+
     TextureRegion GroundReg = new TextureRegion(gTex);
+    PolygonRegion pg  = new PolygonRegion(GroundReg,vertices,triangles);
     BodyDef tank2;
     BodyDef tank1;
     Texture tex;
@@ -107,46 +119,46 @@ public class MainGamaBox implements Screen {
         vert.add(new Vector2(-4200,3));
         ground.createChain(new Vector2[]{
                 new Vector2(-4200,3),
-                new Vector2(-10.8f,4f),
-                new Vector2(-10.4f,3.6f),
-                new Vector2(-10.1f,3.4f),
-                new Vector2(-9.9f,3.8f),
-
-                new Vector2(-8.9f,4f),
-                new Vector2(-8.6f,3.6f),
-                new Vector2(-8.0f,3.4f),
-                new Vector2(-7.6f,3.8f),
-
-                new Vector2(-7.2f,4f),
-                new Vector2(-6.8f,3.6f),
-                new Vector2(-6.5f,3.4f),
-                new Vector2(-5.9f,3.8f),
-
-                new Vector2(-5.6f,4f),
-                new Vector2(-5.2f,3.6f),
-                new Vector2(-4.7f,3.4f),
-                new Vector2(-4.6f,3.8f),
-
-                new Vector2(-4.2f,4f),
-                new Vector2(-4.0f,3.6f),
-                new Vector2(-3.6f,3.2f),
-
-
-                new Vector2(-3.7f,4f),
-                new Vector2(-3.5f,3.6f),
-                new Vector2(-3.2f,3.4f),
-                new Vector2(-2.9f,3.8f),
-
-                new Vector2(-2.4f,4f),
-                new Vector2(-2f,3.6f),
-                new Vector2(-1.6f,3.4f),
-                new Vector2(-1.2f,3.8f),
-
-                new Vector2(-1f,4f),
-                new Vector2(0f,3.6f),
-                new Vector2(0.2f,3.4f),
-                new Vector2(0.6f,3.8f),
-                new Vector2(0.9f,3.5f),
+//                new Vector2(-10.8f,4f),
+//                new Vector2(-10.4f,3.6f),
+//                new Vector2(-10.1f,3.4f),
+//                new Vector2(-9.9f,3.8f),
+//
+//                new Vector2(-8.9f,4f),
+//                new Vector2(-8.6f,3.6f),
+//                new Vector2(-8.0f,3.4f),
+//                new Vector2(-7.6f,3.8f),
+//
+//                new Vector2(-7.2f,4f),
+//                new Vector2(-6.8f,3.6f),
+//                new Vector2(-6.5f,3.4f),
+//                new Vector2(-5.9f,3.8f),
+//
+//                new Vector2(-5.6f,4f),
+//                new Vector2(-5.2f,3.6f),
+//                new Vector2(-4.7f,3.4f),
+//                new Vector2(-4.6f,3.8f),
+//
+//                new Vector2(-4.2f,4f),
+//                new Vector2(-4.0f,3.6f),
+//                new Vector2(-3.6f,3.2f),
+//
+//
+//                new Vector2(-3.7f,4f),
+//                new Vector2(-3.5f,3.6f),
+//                new Vector2(-3.2f,3.4f),
+//                new Vector2(-2.9f,3.8f),
+//
+//                new Vector2(-2.4f,4f),
+//                new Vector2(-2f,3.6f),
+//                new Vector2(-1.6f,3.4f),
+//                new Vector2(-1.2f,3.8f),
+//
+//                new Vector2(-1f,4f),
+//                new Vector2(0f,3.6f),
+//                new Vector2(0.2f,3.4f),
+//                new Vector2(0.6f,3.8f),
+//                new Vector2(0.9f,3.5f),
 
                 new Vector2(1f,3.6f),
                 new Vector2(1.2f,3.4f),
@@ -176,6 +188,66 @@ public class MainGamaBox implements Screen {
                 new Vector2(9.6f,3.4f),
                 new Vector2(9.8f,3.8f),
                 new Vector2(10.6f,3.5f),
+
+                new Vector2(11.2f,4f),
+                new Vector2(11.4f,3.6f),
+                new Vector2(11.9f,3.4f),
+                new Vector2(12.8f,3.8f),
+
+                new Vector2(13.4f,4f),
+                new Vector2(13.9f,3.6f),
+                new Vector2(14.5f,3.4f),
+                new Vector2(14.9f,3.8f),
+
+                new Vector2(15.2f,4f),
+                new Vector2(15.8f,3.6f),
+                new Vector2(16.3f,3.4f),
+                new Vector2(16.8f,3.8f),
+
+                new Vector2(17.2f,4f),
+                new Vector2(17.4f,3.6f),
+                new Vector2(17.9f,3.4f),
+                new Vector2(18.9f,3.8f),
+
+                new Vector2(19.2f,4f),
+                new Vector2(19.8f,3.6f),
+                new Vector2(20.2f,3.4f),
+                new Vector2(20.5f,3.8f),
+
+                new Vector2(21.6f,4f),
+                new Vector2(22.1f,3.6f),
+                new Vector2(22.5f,3.4f),
+                new Vector2(23.6f,3.8f),
+
+                new Vector2(24.0f,4f),
+                new Vector2(24.3f,3.6f),
+                new Vector2(24.5f,3.4f),
+                new Vector2(24.8f,3.8f),
+
+                new Vector2(25.2f,4f),
+                new Vector2(25.8f,3.6f),
+                new Vector2(30.1f,3.4f),
+                new Vector2(30.5f,3.8f),
+
+                new Vector2(30.9f,4f),
+                new Vector2(42.3f,3.6f),
+                new Vector2(42.8f,3.4f),
+                new Vector2(44.1f,3.8f),
+                new Vector2(44.6f,4f),
+                new Vector2(44.9f,3.6f),
+                new Vector2(45.2f,3.4f),
+                new Vector2(45.7f,3.8f),
+
+                new Vector2(45.8f,4f),
+                new Vector2(47.3f,3.6f),
+                new Vector2(47.7f,3.4f),
+                new Vector2(49.7f,3.8f),
+
+                new Vector2(51.6f,4f),
+                new Vector2(51.9f,3.6f),
+                new Vector2(52.2f,3.4f),
+                new Vector2(53.6f,3.8f),
+
 
                 new Vector2(1000,4.2f)
         });
@@ -212,11 +284,11 @@ public class MainGamaBox implements Screen {
         tankA = Tank.tankList.get(0);
         tankA.tankBodyDef = new BodyDef();
         tankA.tankBodyDef.type = BodyDef.BodyType.DynamicBody;
-        tankA.tankBodyDef.position.set(300/40,350/40);
+        tankA.tankBodyDef.position.set(5,10);
         tankA.tankShape = new CircleShape();
         tankA.tankFixture = new FixtureDef();
 //        tankA.tankShape.setAsBox(.5f,1);
-        tankA.tankShape.setRadius(50/40);
+        tankA.tankShape.setRadius(0.6f);
         tankA.tankFixture.shape=tankA.tankShape;
         tankA.tankFixture.friction=.75f;
         tankA.tankFixture.restitution=.1f;
@@ -293,7 +365,7 @@ public class MainGamaBox implements Screen {
         tankB = Tank.tankList.get(1);
         tankB.tankBodyDef = new BodyDef();
         tankB.tankBodyDef.type = BodyDef.BodyType.DynamicBody;
-        tankB.tankBodyDef.position.set(350/40,350/40);
+        tankB.tankBodyDef.position.set(30,10);
         tankB.tankShape = new CircleShape();
         tankB.tankFixture = new FixtureDef();
 //        tankB.tankShape.setAsBox(.5f,1);
@@ -316,7 +388,7 @@ public class MainGamaBox implements Screen {
 //        world.setContactListener(onCollisionListener);
         debug =  new Box2DDebugRenderer();
         camera = new OrthographicCamera();
-        camera.setToOrtho(false,1280,720);
+        camera.setToOrtho(false,1340,720);
         createGround();
         tank1();
         tank2();
@@ -351,11 +423,34 @@ public class MainGamaBox implements Screen {
                 }else if(keycode == Input.Keys.RIGHT){
                     tankB.tankBody.setLinearVelocity(10,0);
                 }
+                else if(keycode == Input.Keys.Y){
+                    for(int i = 0 ; i <3 ; i++) {
+                        final BodyDef aim = new BodyDef();
+                        aim.type = BodyDef.BodyType.DynamicBody;
+                        CircleShape aimer = new CircleShape();
+                        aimer.setRadius((float) (0.05 / 1000f));
+                        final FixtureDef aimFix = new FixtureDef();
+                        aimFix.shape = s2;
+
+                        aimFix.density = 0.01f;
+
+                        aimFix.restitution = 1.0f;
+                        Body j = world.createBody(aim);
+                        j.createFixture(aimFix);
+                        j.setLinearVelocity(velx1, vely1);
+                        if (j.getPosition().x > tankA.tankBody.getPosition().x + 10) {
+                            world.destroyBody(j);
+                        }
+                    }
+
+
+
+                }
                 else if(keycode == Input.Keys.H){
                     Body b2 = world.createBody(bull2);
                     b2.createFixture(bullFix2);
                     //b.applyForceToCenter(new Vector2(100,0),true);
-                    b2.setLinearVelocity(new Vector2(20, 5));
+                    b2.setLinearVelocity(new Vector2(velx1, vely2));
 
                 }
                 else if(keycode == Input.Keys.A){
@@ -374,6 +469,20 @@ public class MainGamaBox implements Screen {
                     isPaused=true;
                     pause();
                 }
+                else if(keycode == Input.Keys.W){
+                    velx1-=2;
+                    vely1+=2;
+                }else if(keycode == Input.Keys.S){
+                    velx1+=2;
+                    vely1-=2;
+                }else if(keycode == Input.Keys.UP){
+                    velx2-=2;
+                    vely2+=2;
+                }else if(keycode == Input.Keys.DOWN){
+                    velx2+=2;
+                    vely2-=2;
+                }
+
 
                 return true;
             }
@@ -499,12 +608,15 @@ public class MainGamaBox implements Screen {
     @Override
     public void render(float delta) {
 
-//        Gdx.gl.glClearColor(0,0,0,1);
-//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+
+        Gdx.gl.glClearColor(0,0,0,1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         ScreenUtils.clear(0,0,0,1);
         camera.update();
         //Add bkg texture here
         world.step(1/60f,6,2);
+
 //        tankHolder.applyForceToCenter(movement,true);
 //        tankHolder.applyLinearImpulse(movement2,new Vector2(tankHolder.getPosition().x,tankHolder.getPosition().y),true);
 
@@ -512,7 +624,7 @@ public class MainGamaBox implements Screen {
 //        tank2Holder.applyLinearImpulse(movement2,new Vector2(tank2Holder.getPosition().x +2,tank2Holder.getPosition().y+2),true);
 //        l=0;
 //        if(l==1) {
-//            camera.position.set(tankHolder.getPosition().x, tankHolder.getPosition().y, 0);
+            //camera.position.set(tankHolder.getPosition().x, tankHolder.getPosition().y, 0);
 //
 //        }
 //        else{
@@ -525,14 +637,15 @@ public class MainGamaBox implements Screen {
 //
 //
 //        movement2.x = 0;
-//        camera.update();
+       //camera.update();
 
 
         batch.begin();
+
         tankA.tankSprite.draw(batch);
         Vector2 pos = tankA.tankBody.getPosition();
         tankA.tankSprite.setSize(150,100);
-        tankA.tankSprite.setPosition(pos.x*40 -20,pos.y*40 -20);
+        tankA.tankSprite.setPosition(pos.x*40 -50,pos.y*40 -50);
 //        System.out.println(tankA.tankBody.getPosition().x*40+ " " + tankA.tankBody.getPosition().y*40);
 //        tankA.tankSprite.setPosition(pos.x*40+620,pos.y*40+215);
 
